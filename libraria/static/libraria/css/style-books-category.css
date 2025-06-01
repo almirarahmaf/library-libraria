@@ -87,8 +87,8 @@ a{
 }
 
 .custom-profile-row {
-  --bs-gutter-x: 5px !important; /* Jarak horizontal antar kolom (misal: 8px) */
-  --bs-gutter-y: 25px !important; /* Jarak vertikal antar baris (misal: 24px) */
+  --bs-gutter-x: 5px !important; 
+  --bs-gutter-y: 25px !important;
 }
 
 .card-img-top{

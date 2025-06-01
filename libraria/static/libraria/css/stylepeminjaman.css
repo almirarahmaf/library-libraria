@@ -87,7 +87,6 @@ a.no-contact:hover{
   text-decoration: underline !important;
 }
 
-/* Mengatur ukuran foto profil */
 .photo {
   width: 36px;
   height: 36px;
@@ -132,7 +131,6 @@ a.no-contact:hover{
   margin-top: 60px;
 }
 
-/* Mengurangi padding horizontal bawaan carousel agar card tetap pas */
 #commentCarousel .carousel-inner {
   padding: 0 20px;
 }

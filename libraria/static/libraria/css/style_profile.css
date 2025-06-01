@@ -73,8 +73,8 @@ h5 {
 }
 
 .book-card:hover {
-    transform: scale(1.05); /* Perbesar saat hover */
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Opsional: efek bayangan */
+    transform: scale(1.05); 
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); 
 }
 
 a{

@@ -147,8 +147,6 @@ a {
   justify-content: space-between;
   align-items: center;
   background-color: #f9f9f5;
-  
-  /* Tanpa position: fixed, footer mengikuti aliran konten */
   margin-top: auto;
 }
 
