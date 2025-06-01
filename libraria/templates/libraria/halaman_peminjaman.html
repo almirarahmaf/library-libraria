@@ -193,9 +193,9 @@
                 <div class="mb-2">
                   <label for="pickup" class="form-label">Pickup Option</label>
                   <select id="pickup" class="form-select form-select-sm">
-                    <option selected>Cash On Delivery</option>
-                    <option>Self Pickup</option>
-                    <option>Delivery Service</option>
+                    <option value="cod" selected>Cash On Delivery</option>
+                    <option value="self">Self Pickup</option>
+                    <option value="delivery">Delivery Service</option>
                   </select>
                 </div>
 
@@ -210,11 +210,11 @@
                   <label class="form-label">Payment Details</label>
                   <div class="border-top border-bottom py-2">
                     <div class="d-flex justify-content-between small mb-1">
-                      <span>Duration</span>
-                      <span><span id="weeks-label">1</span> week</span>
+                      <span>Durasi</span>
+                      <span><span id="weeks-label">1</span> minggu</span>
                     </div>
                     <div class="d-flex justify-content-between small mb-1">
-                      <span>Price/week</span>
+                      <span>Price/minggu</span>
                       <span>Rp. <span id="price-per-week">{{ selected_book.price|floatformat:0 }}</span></span>
                     </div>
 
@@ -234,7 +234,7 @@
                 </div>
 
                 <div class="mb-3">
-                  <label for="payment_proof" class="form-label">Upload Proof of Payment <span class="text-danger">*</span></label>
+                  <label for="payment_proof" class="form-label">Upload Bukti Pembayaran <span class="text-danger">*</span></label>
                   <input type="file" class="form-control form-control-sm" id="payment_proof" name="payment_proof" accept="image/*" required />
                 </div>
               </div>
@@ -336,57 +336,66 @@
 
       if (borrowModalEl) {
         borrowModalEl.addEventListener("hidden.bs.modal", function () {
-          if (fileInput) {
-            fileInput.value = "";
-          }
-          if (payBtn) {
-            payBtn.disabled = true;
-          }
+          if (fileInput) fileInput.value = "";
+          if (payBtn) payBtn.disabled = true;
         });
       }
 
       // Bagian update harga dan estimasi tanggal kembali
       const durationSelect = document.getElementById("duration_weeks");
-      const weeksLabel = document.getElementById("weeks-label");
-      const pricePerWeekEl = document.getElementById("price-per-week");
-      const subtotalEl = document.getElementById("subtotal");
-      const shippingCostEl = document.getElementById("shipping-cost");
-      const totalPriceEl = document.getElementById("total-price");
-      const estimateDate = document.getElementById("estimate-return");
-      const durationInput = document.getElementById("duration_weeks_input");
-      const today = new Date();
+    const weeksLabel     = document.getElementById("weeks-label");
+    const pricePerWeekEl = document.getElementById("price-per-week");
+    const subtotalEl     = document.getElementById("subtotal");
+    const shippingCostEl = document.getElementById("shipping-cost");
+    const totalPriceEl   = document.getElementById("total-price");
+    const estimateDate   = document.getElementById("estimate-return");
+    const durationInput  = document.getElementById("duration_weeks_input");
+    const pickupSelect   = document.getElementById("pickup");  // ← ini yang baru
 
-      const shippingCost = parseInt(shippingCostEl.textContent.replace(/\D/g, "")) || 0;
-      const pricePerWeek = parseInt(pricePerWeekEl.textContent.replace(/\D/g, "")) || 0;
+    const today          = new Date();
+    const originalShipCost = parseInt(shippingCostEl.textContent.replace(/\D/g, "")) || 0;
+    const pricePerWeek     = parseInt(pricePerWeekEl.textContent.replace(/\D/g, "")) || 0;
 
-      function formatDate(d) {
-        const yyyy = d.getFullYear();
-        const mm = String(d.getMonth() + 1).padStart(2, "0");
-        const dd = String(d.getDate()).padStart(2, "0");
-        return `${yyyy}/${mm}/${dd}`;
+    function formatDate(d) {
+      const yyyy = d.getFullYear();
+      const mm   = String(d.getMonth() + 1).padStart(2, "0");
+      const dd   = String(d.getDate()).padStart(2, "0");
+      return `${yyyy}/${mm}/${dd}`;
+    }
+
+    function updatePricing() {
+      // 1) Hitung subtotal
+      const weeks = parseInt(durationSelect.value) || 1;
+      weeksLabel.textContent = weeks;
+      durationInput.value    = weeks;
+      const subtotal = pricePerWeek * weeks;
+      subtotalEl.textContent = subtotal.toLocaleString("id-ID");
+
+      // 2) Tentukan shippingCost: 0 jika “self”
+      let shippingCost = originalShipCost;
+      if (pickupSelect && pickupSelect.value === "self") {
+        shippingCost = 0;
       }
+      shippingCostEl.textContent = shippingCost.toLocaleString("id-ID");
 
-      function updatePricing() {
-        const weeks = parseInt(durationSelect.value) || 1;
-        weeksLabel.textContent = weeks;
-        durationInput.value = weeks;
+      // 3) Hitung total price
+      const total = subtotal + shippingCost;
+      totalPriceEl.textContent = total.toLocaleString("id-ID");
 
-        const subtotal = pricePerWeek * weeks;
-        subtotalEl.textContent = subtotal.toLocaleString("id-ID");
+      // 4) Hitung tanggal kembali
+      const retDate = new Date(today);
+      retDate.setDate(retDate.getDate() + 7 * weeks);
+      estimateDate.textContent = formatDate(retDate);
+    }
 
-        const total = subtotal + shippingCost;
-        totalPriceEl.textContent = total.toLocaleString("id-ID");
+    durationSelect.addEventListener("change", updatePricing);
+    if (pickupSelect) {
+      pickupSelect.addEventListener("change", updatePricing);
+    }
 
-        const retDate = new Date(today);
-        retDate.setDate(retDate.getDate() + 7 * weeks);
-        estimateDate.textContent = formatDate(retDate);
-      }
-
-      durationSelect.addEventListener("change", updatePricing);
-
-      // Inisialisasi tampilan awal
-      updatePricing();
-    });
+    // Inisialisasi
+    updatePricing();
+  });
   </script>
 </body>
 {% endblock %}

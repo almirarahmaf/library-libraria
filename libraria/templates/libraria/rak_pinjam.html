@@ -108,6 +108,14 @@
                     You have a fine of
                     <strong>Rp. {{ b.denda|floatformat:0 }}</strong>. Please upload proof of payment
                   </p>
+                  <div class="mb-3">
+                    <p class="mb-1">
+                      Account Number: {{ b.book.librender.profile.account }}<br />
+                    </p>
+                    <p class="mb-1">
+                      Account Holder: {{ b.book.librender.profile.name }}
+                    </p>
+                  </div>
                   <form method="POST" action="{% url 'return_book' borrowing_id=b.borrowing_id %}" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="mb-3">

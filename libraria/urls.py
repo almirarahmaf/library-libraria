@@ -44,8 +44,8 @@ urlpatterns = [
     path('editbook/<str:book_id>/', views.editbook, name='editbook'),
     path('deletebook/<str:book_id>/', views.deletebook, name='deletebook'),
 
-    path('peminjaman/<str:book_id>/', views.halamanpinjam, name='halamanpinjam'),
-    path('rakpinjam/', views.rak_pinjam, name='rak_pinjam'),
+    path('borrowing/<str:book_id>/', views.halamanpinjam, name='halamanpinjam'),
+    path('borrowingShelf/', views.rak_pinjam, name='rak_pinjam'),
     path('borrow/<str:book_id>/', views.borrow_book, name='borrow_book'),
     path('return/<str:borrowing_id>/', views.return_book, name='return_book'),
     path('reviewuser/<str:book_id>/', views.review_user_view, name='review_user'),
