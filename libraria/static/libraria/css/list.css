@@ -131,7 +131,7 @@
     text-align: center;
     border: 2px solid;
     box-sizing: border-box;
-    width: 100px;
+    width: 120px;
 }
 
 .status-label.borrowed {
@@ -141,9 +141,16 @@
     text-align: center;
 }
 
-.status-label.completed {
+.status-label.finished {
     color: #28a745;
     border-color: #28a745;
+    background-color: #F9F9F5;
+    text-align: center;
+}
+
+.status-label.finePending {
+    color: #2870a7;
+    border-color: #2870a7;
     background-color: #F9F9F5;
     text-align: center;
 }
@@ -189,7 +196,7 @@
     .status-label {
         font-size: 11px;
         padding: 2px 10px;
-        width: 80px;
+        width: 90px;
     }
 
     .checkbox-cell {

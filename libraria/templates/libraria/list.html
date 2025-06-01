@@ -36,9 +36,11 @@
                 {% if item.status == 'Borrowed' %}
                     <div class="status-label borrowed">Borrowed</div>
                 {% elif item.status == 'Returned' %}
-                    <div class="status-label completed">Completed</div>
+                    <div class="status-label finished">Finished</div>
                 {% elif item.status == 'Declined' %}
                     <div class="status-label declined">Declined</div>
+                {% elif item.status == 'FinePending' %}
+                    <div class="status-label finePending">Fine Pending</div>
                 {% else %}
                     <div class="status-label pending">Pending</div>
                 {% endif %}
