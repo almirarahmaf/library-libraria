@@ -1,0 +1,393 @@
+{% extends "libraria/base_footer.html" %} {% load static %} {% block content %} {% load borrowing_extras %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+<body>
+  <header class="d-flex justify-content-between align-items-center">
+    <a href="javascript:history.back()" class="ms-3">
+      <img src="{% static 'libraria/asset/Frame (2).png' %}" alt="Icon" class="back-icon" width="37px" />
+    </a>
+    <p class="tittle m-0" style="color: #3b230a;">BORROWING</p>
+    <div style="width: 37px" class="me-3"></div>
+  </header>
+
+  <div class="container my-5">
+    <div class="row">
+      <!-- Book Details -->
+      <div class="col-md-8">
+        <div class="book-container shadow">
+          <h4 class="text-center mb-4">Book Details</h4>
+          <div class="row">
+            <div class="col-md-4 text-center">
+              <img src="{{ selected_book.cover_image.url }}" style="width: 150px; height: 200px; margin-top: 20px;" class="img-fluid rounded" alt="{{ selected_book.title }}" />
+            </div>
+            <div class="col-md-8 mt-3 isi" >
+              <h5>{{ selected_book.title }}</h5>
+              <p class="detail text-white">
+                {{ selected_book.author }} | {{ selected_book.publisher }} | {{ selected_book.years }} | {{ selected_book.number_of_pages }} Pages | {{ selected_book.category.category_name }}
+              </p>
+              <div class="star">
+                {# Menampilkan rating rata-rata buku #} {% for i in "12345" %} {% if forloop.counter <= full_stars %}
+                <i class="fa fa-star" style="color: #b4942a"></i>
+                {% elif forloop.counter == full_stars|add:"1" and has_half %}
+                <i class="fa fa-star-half-o" style="color: #b4942a"></i>
+                {% else %}
+                <i class="fa fa-star-o" style="color: #b4942a"></i>
+                {% endif %} {% endfor %}
+              </div>
+              <p class="price me-2">Rp{{ selected_book.price|floatformat:0 }},00</p>
+              <p class="desc">{{ selected_book.synopsis }}</p>
+            </div>
+          </div>
+
+          <!-- Comment Carousel -->
+          <div class="comment position-relative">
+            <h6 class="ps-5">Comment</h6>
+            <div id="commentCarousel" class="carousel slide" data-bs-ride="carousel">
+              <div class="carousel-inner">
+                {% if review_chunks %} {% for chunk in review_chunks %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                  <div class="row justify-content-center gx-3">
+                    {% for rev in chunk %} {# Tentukan index di dalam chunk dengan forloop.counter #} {% if forloop.counter == 3 %} {# Kartu ke-3 di slide: hanya tampil di ≥ md #}
+                    <div class="col-6 col-md-4 d-none d-md-block">
+                      <div class="comment-card">
+                        <div class="d-flex gap-2">
+                          <img src="{{ rev.username.profile.profile_picture.url }}" class="photo" alt="Profile" />
+                          <div class="comment-author">
+                            <div class="fw-bold">{{ rev.username.username }}</div>
+                            <div class="text-muted small">{{ rev.username.profile.bio }}</div>
+                          </div>
+                        </div>
+                        <p class="capt-comment mt-4">"{{ rev.comment }}"</p>
+                      </div>
+                    </div>
+                    {% else %} {# Kartu ke-1 dan ke-2: selalu tampil (col-6 di sm, col-md-4 di md+) #}
+                    <div class="col-6 col-md-4">
+                      <div class="comment-card">
+                        <div class="d-flex gap-2">
+                          <img src="{{ rev.username.profile.profile_picture.url }}" class="photo" alt="Profile" style="border: 2px solid #3b230a;"/>
+                          <div class="comment-author">
+                            <div class="fw-bold">{{ rev.username.username }}</div>
+                            <div class="text-muted small">{{ rev.username.profile.bio }}</div>
+                          </div>
+                        </div>
+                        <p class="capt-comment mt-4">"{{ rev.comment }}"</p>
+                      </div>
+                    </div>
+                    {% endif %} {% endfor %}
+                  </div>
+                </div>
+                {% endfor %} {% else %}
+                <div class="carousel-item active">
+                  <p class="comment-text text-center">No reviews yet for this book.</p>
+                </div>
+                {% endif %}
+              </div>
+
+              <!-- Carousel Controls -->
+              <button class="carousel-control-prev" type="button" data-bs-target="#commentCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+              </button>
+              <button class="carousel-control-next" type="button" data-bs-target="#commentCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="col-md-4 align-self-center">
+        <div class="p-3">
+          <h5>Librender</h5>
+          <div class="d-flex align-items-center">
+            <img src="{% static 'libraria/asset/person.png' %}" alt="Logo" style="width: 28px; height: 32px" class="me-2" />
+            <div>
+              {{ librarian_profile.name }}
+            </div>
+          </div>
+
+          <h5 class="mt-5">Contact</h5>
+          <div class="d-flex align-items-center mb-5">
+            <img src="{% static 'libraria/asset/telephone.png' %}" alt="Logo" style="width: 28px; height: 32px" class="me-2" />
+            <div>
+              <a href="https://wa.me/62{{ librarian_profile.phone|slice:'1:' }}?text=Halo%20Librender!%0ASaya%20ingin%20bertanya%20tentang%20buku%20{{selected_book.title}}" target="_blank" style="color: #3B230A; text-decoration: none;" class="no-contact">
+                  {{ librarian_profile.phone }}
+              </a>
+            </div>
+          </div>
+
+          {% if selected_book.stock <= 0 %}
+          <button class="btn btn-dark btn-borrow mt-5" type="button" disabled>Borrow</button>
+          <p class="text-danger mt-2">Stok habis</p>
+          {% else %} {% if existing_request %} {% if existing_request.status == "Pending" %}
+          <p class="status mt-2" style="color: #3b230a">Requested!</p>
+          <button class="btn btn-dark btn-borrow" type="button" disabled>Borrow</button>
+          {% elif existing_request.status == "Borrowed" %}
+          <p class="status mt-2" style="color: #3b230a">This book is already borrowed by you!</p>
+          <button class="btn btn-dark btn-borrow" data-bs-toggle="modal" data-bs-target="#ticketModal" type="button">Show Ticket</button>
+          {% endif %} {% else %} {% if last_request %} {% if last_request.status == "Declined" %}
+          <p class="status text-danger mt-2">Your request has been declined</p>
+          <button class="btn btn-dark btn-borrow" data-bs-toggle="modal" data-bs-target="#borrowModal" type="button">Borrow Again</button>
+          {% elif last_request.status == "Returned" %}
+          <p class="status mt-3" style="color: #3b230a">You already returned the book. You can borrow it again!</p>
+          <button class="btn btn-dark btn-borrow" data-bs-toggle="modal" data-bs-target="#borrowModal" type="button">Borrow Again</button>
+          {% else %}
+          <button class="btn btn-dark btn-borrow mt-5" data-bs-toggle="modal" data-bs-target="#borrowModal" type="button">Borrow</button>
+          {% endif %} {% else %}
+          <button class="btn btn-dark btn-borrow mt-5" data-bs-toggle="modal" data-bs-target="#borrowModal" type="button">Borrow</button>
+          {% endif %} {% endif %} {% endif %}
+        </div>
+      </div>
+
+      <!-- Modal Borrow / Pay -->
+      <div class="modal fade" id="borrowModal" tabindex="-1" aria-labelledby="borrowModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content p-3">
+            <div class="modal-header">
+              <h5 class="modal-title" id="borrowModalLabel">{{ selected_book.title }}</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <!-- Form wrap -->
+            <form method="POST" action="{% url 'borrow_book' book_id=selected_book.book_id %}" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="modal-body">
+                <!-- Informasi buku & biaya (dengan harga per minggu) -->
+                <div class="row mb-3">
+                  <div class="col-3">
+                    <img src="{{ selected_book.cover_image.url }}" class="img-fluid rounded" style="max-width: 80px" alt="{{ selected_book.title }}" />
+                  </div>
+                  <div class="col-9">
+                    <h6 class="mb-1">{{ selected_book.title }}</h6>
+                    <p class="mb-1 text-white small">{{ selected_book.author }}</p>
+                    <p class="mb-1 small">Rp. {{ selected_book.price|floatformat:0 }} / week</p>
+                    <div class="star">
+                      {% for i in "12345" %} {% if forloop.counter <= full_stars %}
+                      <i class="fa fa-star" style="color: #b4942a"></i>
+                      {% elif forloop.counter == full_stars|add:"1" and has_half %}
+                      <i class="fa fa-star-half-o" style="color: #b4942a"></i>
+                      {% else %}
+                      <i class="fa fa-star-o" style="color: #b4942a"></i>
+                      {% endif %} {% endfor %}
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <label for="duration_weeks" class="form-label">Borrowing Duration (week)</label>
+                  <select id="duration_weeks" name="duration_weeks" class="form-select form-select-sm" required>
+                    <option value="1" selected>1 Week</option>
+                    <option value="2">2 Week</option>
+                    <option value="3">3 Week</option>
+                    <option value="4">4 Week</option>
+                  </select>
+                </div>
+
+                <p class="small mb-2">
+                  <strong>Return Estimation:</strong>
+                  <span id="estimate-return">—</span>
+                </p>
+
+                <!-- Pickup Option -->
+                <div class="mb-2">
+                  <label for="pickup" class="form-label">Pickup Option</label>
+                  <select id="pickup" class="form-select form-select-sm">
+                    <option selected>Cash On Delivery</option>
+                    <option>Self Pickup</option>
+                    <option>Delivery Service</option>
+                  </select>
+                </div>
+
+                <!-- Account Number -->
+                <div class="mb-2">
+                  <label class="form-label">Account Number</label>
+                  <p class="small mb-0">{{ librarian_profile.account }}</p>
+                </div>
+
+                <!-- Payment Details -->
+                <div class="mb-2">
+                  <label class="form-label">Payment Details</label>
+                  <div class="border-top border-bottom py-2">
+                    <div class="d-flex justify-content-between small mb-1">
+                      <span>Duration</span>
+                      <span><span id="weeks-label">1</span> week</span>
+                    </div>
+                    <div class="d-flex justify-content-between small mb-1">
+                      <span>Price/week</span>
+                      <span>Rp. <span id="price-per-week">{{ selected_book.price|floatformat:0 }}</span></span>
+                    </div>
+
+                    <div class="d-flex justify-content-between small mb-1">
+                      <span>Shipping Cost</span>
+                      <span>Rp. <span id="shipping-cost">{{ shipping_cost|floatformat:0 }}</span></span>
+                    </div>
+                    <div class="d-flex justify-content-between small mb-1">
+                      <span>Subtotal</span>
+                      <span>Rp. <span id="subtotal">{{ selected_book.price|floatformat:0 }}</span></span>
+                    </div>
+                  </div>
+                  <div class="small d-flex justify-content-between mt-2">
+                    <span>Total Price</span>
+                    <span>Rp. <span id="total-price">{{ selected_book.price|add:shipping_cost|floatformat:0 }}</span></span>
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <label for="payment_proof" class="form-label">Upload Proof of Payment <span class="text-danger">*</span></label>
+                  <input type="file" class="form-control form-control-sm" id="payment_proof" name="payment_proof" accept="image/*" required />
+                </div>
+              </div>
+
+              <!-- Modal footer -->
+              <div class="modal-footer">
+                {% if existing_request and existing_request.payment_proof %}
+                <button type="button" class="btn btn-secondary btn-sm" disabled>Sudah Mengunggah Bukti</button>
+                {% else %}
+                <input type="hidden" name="duration_weeks" id="duration_weeks_input" value="1" />
+                <button type="submit" id="pay-btn" class="btn btn-dark btn-sm pay-btn" disabled onclick="return confirm('Do you want to borrow this book?')">Pay & Borrow</button>
+                {% endif %}
+              </div>
+            </form>
+            <!-- End form -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Ticket (QR Code dan Bukti Peminjaman) -->
+  <div class="modal fade" id="ticketModal" tabindex="-1" aria-labelledby="ticketModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content ticket-content p-3">
+        <div class="strip-header"></div>
+        <button type="button" class="btn-close ms-auto me-2 mt-2" data-bs-dismiss="modal"></button>
+
+        <div class="text-center mb-2">
+          {% if existing_request %}
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ existing_request.borrowing_id }}" class="qr-code my-3" alt="QR Code" />
+          {% endif %}
+        </div>
+
+        <div class="px-3">
+          <div class="d-flex justify-content-between small mb-2">
+            <div>
+              <div class="fw-bold">Loan Number</div>
+              <div>{{ existing_request.borrowing_id }}</div>
+            </div>
+            <div>
+              <div class="fw-bold">Ticket Number</div>
+              <div>T{{ existing_request.borrowing_id|slice:"1:" }}</div>
+            </div>
+          </div>
+
+          <div class="mb-2 small">
+            <div class="fw-bold">Return Date</div>
+            <div>{{ existing_request.return_date|date:"F j, Y" }}</div>
+          </div>
+
+          <hr style="border: none; border-top: 4px dashed #3b230a" class="my-3" />
+
+          <div class="d-flex justify-content-between small">
+            <div>
+              <div class="fw-bold">Borrower</div>
+              <div>{{ existing_request.borrower.username }}</div>
+            </div>
+            <div>
+              <div class="fw-bold">Librender</div>
+              <div>{{ librarian_profile.name }}</div>
+            </div>
+          </div>
+
+          <div class="mt-3 small">
+            <div class="fw-bold">Book Title</div>
+            <div>{{ selected_book.title }}</div>
+          </div>
+        </div>
+
+        <div class="text-center mt-4">
+          <button class="download-btn btn btn-dark rounded px-4">
+            Download
+            <img src="{% static 'libraria/asset/Download (1).png' %}" width="20px" alt="Download Icon" />
+          </button>
+          <p class="small mt-2 mb-0">Enjoy the ease of finding books</p>
+        </div>
+
+        <div class="strip-footer"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      // Bagian validasi file dan tombol Pay & Borrow
+      const borrowModalEl = document.getElementById("borrowModal");
+      const fileInput = document.getElementById("payment_proof");
+      const payBtn = document.getElementById("pay-btn");
+
+      if (fileInput && payBtn) {
+        payBtn.disabled = true;
+        fileInput.addEventListener("change", function () {
+          payBtn.disabled = !(fileInput.files && fileInput.files.length > 0);
+        });
+      }
+
+      if (borrowModalEl) {
+        borrowModalEl.addEventListener("hidden.bs.modal", function () {
+          if (fileInput) {
+            fileInput.value = "";
+          }
+          if (payBtn) {
+            payBtn.disabled = true;
+          }
+        });
+      }
+
+      // Bagian update harga dan estimasi tanggal kembali
+      const durationSelect = document.getElementById("duration_weeks");
+      const weeksLabel = document.getElementById("weeks-label");
+      const pricePerWeekEl = document.getElementById("price-per-week");
+      const subtotalEl = document.getElementById("subtotal");
+      const shippingCostEl = document.getElementById("shipping-cost");
+      const totalPriceEl = document.getElementById("total-price");
+      const estimateDate = document.getElementById("estimate-return");
+      const durationInput = document.getElementById("duration_weeks_input");
+      const today = new Date();
+
+      const shippingCost = parseInt(shippingCostEl.textContent.replace(/\D/g, "")) || 0;
+      const pricePerWeek = parseInt(pricePerWeekEl.textContent.replace(/\D/g, "")) || 0;
+
+      function formatDate(d) {
+        const yyyy = d.getFullYear();
+        const mm = String(d.getMonth() + 1).padStart(2, "0");
+        const dd = String(d.getDate()).padStart(2, "0");
+        return `${yyyy}/${mm}/${dd}`;
+      }
+
+      function updatePricing() {
+        const weeks = parseInt(durationSelect.value) || 1;
+        weeksLabel.textContent = weeks;
+        durationInput.value = weeks;
+
+        const subtotal = pricePerWeek * weeks;
+        subtotalEl.textContent = subtotal.toLocaleString("id-ID");
+
+        const total = subtotal + shippingCost;
+        totalPriceEl.textContent = total.toLocaleString("id-ID");
+
+        const retDate = new Date(today);
+        retDate.setDate(retDate.getDate() + 7 * weeks);
+        estimateDate.textContent = formatDate(retDate);
+      }
+
+      durationSelect.addEventListener("change", updatePricing);
+
+      // Inisialisasi tampilan awal
+      updatePricing();
+    });
+  </script>
+</body>
+{% endblock %}
+

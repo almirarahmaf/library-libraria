@@ -1,0 +1,127 @@
+*{
+    font-family: 'Jeju Gothic', sans-serif;
+}
+
+.container-fluid{
+    margin: 0;
+    padding: 0;
+}
+
+/* left */
+.left {
+    background-color: #CFBBA6;
+    position: fixed;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 45%;
+    height: 100vh;
+}
+
+.left h1{
+    color: #3B230A;
+    font-size: 60px;
+    margin-top: 60px;
+}
+
+.left p{
+    color: #3B230A;
+    font-size: 25px;
+}
+
+.left img{
+    margin-top: 100px;
+    width: 300px;
+}
+
+@media (max-width: 768px){
+    .left h1{
+        font-size: 38px;
+        margin-top: 120px;
+    }
+
+    .left p{
+        font-size: 20px;
+    }
+
+    .left img{
+        width: 200px;
+    }
+}
+
+/* right */
+.right{
+    position: relative;
+    background-color: #F9F9F5;
+    margin-left: 45%;
+    padding-top: 35px;
+}
+
+.right h1{
+    text-align: center;
+    color: #3B230A;
+}
+
+#register-form{
+    margin-left: 80px;
+    margin-right: 80px;
+    margin-top: 20px;
+}
+
+#register-form label{
+    color: #3B230A;
+    margin-top: 20px;
+}
+
+#register-form label{
+    color: #3B230A;
+    font-family: 'Jeju Gothic', sans-serif;
+}
+
+#register-form input,
+#register-form textarea,
+#register-form select{
+    border: 0px;
+    background-color: rgba(207, 187, 166, 0.8);
+    color: #3B230A;
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+input[type="file"]::file-selector-button{
+    background-color: rgba(207, 187, 166, 0.8);
+    color: #3B230A;
+}
+
+input[type="file"]::file-selector-button:hover{
+    background-color: #3B230A !important;
+    color: #F9F9F5;
+}
+
+#register-form .register{
+    border: none;
+    background-color: #3B230A;
+    color: #F9F9F5;
+    padding: 7px;
+    width: 18%;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.2);
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+#register-form .register:hover{
+    background-color: #CFBBA6;
+    color: #3B230A;
+}
+
+@media (max-width: 768px){
+    #register-form{
+        margin-left: 50px;
+        margin-right: 50px;
+    }
+
+    #register-form .register{
+        width: 40%;
+    }
+}

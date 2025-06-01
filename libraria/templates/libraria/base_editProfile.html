@@ -1,0 +1,10 @@
+<div class="profile-card d-flex align-items-center">
+    <div class="col-3 d-flex flex-column align-items-center" id="userProfile">
+        <img src="{{ user.profile.profile_picture.url }}" alt="profile" class="profile-image">
+        <h3>{{ request.user }}</h3>
+        <ul class="nav nav-tabs justify-content-center mt-3 gap-3" id="profileTabs">
+            <a href="{% url 'editProfile' %}" class="btn-align-middle {% if request.resolver_match.url_name == 'editProfile' %}active{% endif %}">Edit Profile</a>
+            <a href="{% url 'change_password' %}" class="btn-align-middle {% if request.resolver_match.url_name == 'change_password' %}active{% endif %}">Change Password</a>
+        </ul>
+    </div>
+</div>

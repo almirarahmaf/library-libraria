@@ -1,0 +1,273 @@
+body{
+  background-color: #FFFFF1;
+  font-family: 'Jeju Gothic', sans-serif;
+  display: flex;
+}
+
+.stars {
+  margin-top: -10px !important;
+  color: #f4c150;
+}
+.stars .fa-star {
+  margin-right: 2px;
+}
+
+header{
+  background-color: #FFFFF1;
+  color: #133E87;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 4px;
+}
+
+.container-fluid{
+  text-align: center;
+  color: #133E87;
+  font-size: 32px;
+  padding: 20px;
+}
+
+.back-icon{
+  margin-left: 10px;
+}
+
+.col-md-8{
+  background-color: #CBDCEB;
+  box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.5);
+  margin-top: 20px;
+  margin-left: 0px;
+  border-radius: 10px;
+  padding: 15px;
+}
+
+.detail{
+  font-size: 26px;
+  margin-top: 10px;
+}
+
+.book{
+  font-size: 18px;
+  text-align: left;
+  margin-left: 10px;
+  margin-top: 10px;
+}
+
+.info{
+  color: #608BC1;
+  font-size: 14px;
+  text-align: left;
+  margin-left: 10px;
+}
+
+.synopsis{
+  font-size: 14px;
+  text-align: justify;
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
+.book-cover {
+  max-width: 100%;
+  height: auto;
+  border-radius:3px;
+  margin-left: 10px;
+  margin-top: 3px;
+  display: block;
+}
+
+.rating{
+  text-align: left;
+  color: #D4AF37;
+  font-size: 1.8rem;
+  margin-left: 10px;
+}
+
+.comment-cont {
+  margin-top: 20px;
+}
+
+.comment-title{
+  font-size: 18px;
+  text-align: left;
+  margin-left: 10px;
+}
+
+.comments{
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.comment-card{
+  background-color: #FFFFF1;
+  border-radius: 10px;
+  box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.5);
+  text-align: left;
+  margin-left: 10px;
+  padding: 5px;
+  width: 300px;
+}
+
+.comment-header{
+  display: flex;
+  font-size: 17px;
+  margin-top: 10px;
+  margin-left: 10px;
+  gap: 5px;
+}
+
+.author-bio{
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 2px;
+}
+
+.comment-author{
+  margin: 0;
+}
+
+.bio{
+  color: #608BC1;
+  font-size: 15px;
+}
+
+.photo{
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.comment-text{
+  font-size: 16px;
+  margin-left: 10px;
+  margin-top: 20px;
+}
+
+.col-md-4{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.kontak{
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+
+}
+
+.contact{
+  text-align: left;
+  font-size: 26px;
+  margin-top: 10px;
+}
+
+.contact-wrapper{
+  display: flex;
+  gap: 10px;
+  margin-left: 20px;
+}
+
+.contact-2{
+  font-size: 20px;
+  margin-bottom: 2px;
+  justify-content: flex-start;
+  display: flex;
+}
+
+.contact-img, .telpon{
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.contact-wrapper img{
+  object-fit: contain;
+}
+
+.custom-btn{
+  flex: 1;
+  background: linear-gradient(to bottom,#608BC1,#133E87);
+  color: white;
+  width: 350px;
+  text-align: center;
+  margin-top: 20px;
+  margin-left: 20px;
+  margin: 20px auto;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 15px;
+  box-sizing: border-box;
+  box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.5);
+}
+
+.custom-btn:hover{
+  background: linear-gradient(to bottom,#FFFFF1,#FFFFF1);
+  color: #133E87;
+  border: 2px solid #133E87;
+  border-radius: 15px;
+}
+
+h3{
+  font-size: 18px;
+  margin: 0;
+  margin-bottom: 0;
+  margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+  .header {
+      flex-direction: column;
+      text-align: center;
+  }
+
+  .header h1 {
+      font-size: 1.5rem;
+  }
+
+  .book-detail,
+  .contact-wrapper {
+      text-align: center;
+  }
+
+  .book-cover {
+      max-width: 75%;
+  }
+
+  .button {
+      font-size: 14px;
+      padding: 8px 16px;
+  }
+}
+
+@media (max-width: 576px) {
+  .header {
+      padding: 5px;
+  }
+
+  .book-cover {
+      max-width: 100%;
+  }
+
+  .book-detail {
+      margin-bottom: 10px;
+  }
+
+  .contact-wrapper {
+      padding: 10px;
+  }
+
+  .button {
+      font-size: 12px;
+      padding: 6px 12px;
+      width: 100%; 
+      text-align: center;
+  }
+
+  .footer h3 {
+      font-size: 1rem;
+  }
+}

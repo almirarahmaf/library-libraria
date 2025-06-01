@@ -1,0 +1,39 @@
+{% extends "libraria/base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'libraria/css/addbook.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="content">
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <p class="book-info">Book Information - {{ book.title }}</p>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="book-container">
+            {% for field in form %}
+                <div class="mb-1">
+                    <label class="detail">{{ field.label }}</label>
+                    {{ field }}
+                    {{ field.errors }}
+                </div>
+            {% endfor %}
+            <div class="button-group">
+                <a href="{% url 'librender' %}" class="btn btn-back">Back</a>
+                <button type="submit" class="btn btn-save">Update</button>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}

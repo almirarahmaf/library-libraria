@@ -1,0 +1,155 @@
+.profile-card {
+    background-color: #CFBBA6;
+    border-radius: 30px;
+    padding: 30px;
+    box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.2);
+    margin-top: 100px;
+    font-family: 'Jeju Gothic', sans-serif;
+}
+
+.profile-image {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid #3B230A;
+    margin-bottom: 30px;
+}
+
+p a:hover{
+    text-decoration: underline;
+}
+
+.star-rating {
+    margin-top: 10px;
+    margin-left: -20px;
+}
+
+.star-rating i {
+    color: #b4942a;
+}
+
+.profile-card #details h3 {
+    color: #3B230A;
+    margin-bottom: 0;
+}
+
+.profile-card #details p {
+    color: #3B230A;
+    margin-top: 0;
+}
+
+.profile-card #details i {
+    color: #3B230A;
+}
+
+.profile-card #details .map i {
+    color: #3B230A;
+    margin-top: 20px;
+}
+
+.profile-card #details .map p {
+    margin-left: 20px;
+    margin-top: 14px;
+    margin-bottom: 0;
+}
+
+.phone-date {
+    gap: 50px;
+}
+
+h5 {
+    color: #3B230A;
+}
+
+.book-card {
+    background-color: #CFBBA6;
+    border-radius: 10px;
+    padding: 20px;
+    width: 90%;
+    height: 95%;
+    font-family: 'Jeju Gothic', sans-serif;
+    transition: transform 0.3s ease;
+}
+
+.book-card:hover {
+    transform: scale(1.05); /* Perbesar saat hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Opsional: efek bayangan */
+}
+
+a{
+    text-decoration: none;
+}
+
+.book-card img{
+    width: 150px;
+    height: 220px;
+}
+
+.book {
+    margin-top: 8px;
+    margin-bottom: -10px;
+    margin-left: 0px;
+    color: #b4942a;
+}
+
+.fw-bold {
+    margin-top: 15px;
+    color: #3B230A;
+}
+
+
+@media (max-width: 768px) {
+    .profile-card {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    #userProfile {
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .profile-image {
+        margin-left: 0;
+    }
+
+    .average-rating {
+        margin-left: 0;
+    }
+
+    #details {
+        align-items: center;
+        text-align: center;
+    }
+
+    .phone-date {
+        justify-content: center;
+    }
+
+    .map {
+        justify-content: center;
+    }
+
+    .book-card{
+        width: 90%;
+    }
+
+    .book-card img{
+        width: 150px;
+        height: 170px;
+    }
+}
+
+@media (max-width: 576px) {
+    .book-card img{
+        width: 130px;
+        height: 180px;
+        align-items: center;
+    }
+
+    .book-card{
+        width: 75%;
+    }
+}

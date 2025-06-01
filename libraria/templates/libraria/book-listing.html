@@ -1,0 +1,42 @@
+{% extends 'libraria/base-user.html' %}
+{% load static %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link href="{% static 'libraria/css/style-books-category.css' %}" rel="stylesheet">
+
+<div class="container mt-3">
+    <h3>{{ heading }}</h3>
+
+    {% if query %}
+        <p class="ms-1">Showing results for: <strong>{{ query }}</strong></p>
+    {% endif %}
+
+    <div class="row d-flex gap-3 p-2 rounded" id="book">
+        {% if book_list %}
+            {% for listbook in book_list %}
+                <div class="card-book">
+                    <a href="{% url 'halamanpinjam' book.book_id %}"><img src="{{ listbook.cover_image.url }}" alt="{{ listbook.title }}" class="img-cover"></a>
+                    <div class="justify-content-start mt-2" id="detail">
+                        <a href="{% url 'halamanpinjam' book.book_id %}"><p>{{ listbook.title }}</p></a>
+                        <p class="writer">{{ listbook.author }}</p> 
+                        <div class="stars">
+                            {% for i in listbook.full_stars %}
+                                <i class="fa fa-star"></i> 
+                            {% endfor %}
+                            {% for i in listbook.empty_stars %}
+                                <i class="fa-regular fa-star"></i>
+                            {% endfor %}
+                        </div>
+                        <p class="recom">Rp.{{ listbook.price }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="not-found">No books found.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

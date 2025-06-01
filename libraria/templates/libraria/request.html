@@ -1,0 +1,115 @@
+{% extends "libraria/base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'libraria/css/request.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="request-header">
+    <p class="request">Borrow Request</p>
+    <div class="search-container">
+        <div class="search-input-wrapper">
+            <img src="{% static 'libraria/asset/search.png' %}" alt="Search" class="search-icon">
+            <input type="text" class="search-input" id="search" placeholder="Search">
+        </div>
+    </div>
+</div>
+
+<!-- SECTION A: Pending Borrow Requests -->
+<section class="table-container mb-5">
+    <h5 class="mt-4" style="color: #3B230A;">Pending Borrow Requests</h5>
+
+    <div class="table-header">
+    <div class="checkbox-cell"><input type="checkbox" disabled></div>
+    <div>Username</div>
+    <div>Email</div>
+    <div>Book Title</div>
+    <div>Proof</div>
+    <div>Request Action</div>
+</div>
+
+<div class="row-container">
+    {% for req in pending_requests %}
+    <div class="row-content">
+        <div class="checkbox-cell"><input type="checkbox"></div>
+        <div class="detail">{{ req.borrower.username }}</div>
+        <div class="detail">{{ req.borrower.email }}</div>
+        <div class="detail">{{ req.book.title }}</div>
+        <div class="detail">
+            {% if req.payment_proof %}
+                <a href="{{ req.payment_proof.url }}" target="_blank"  style="text-decoration: none; color: #3B230A;" class="proof">View Proof</a>
+            {% else %}
+                <span class="text-muted">No proof</span>
+            {% endif %}
+        </div>
+        <div class="action-button">
+            <form method="POST" action="{% url 'accept_borrow' req.borrowing_id %}" style="display:inline;">
+                {% csrf_token %}
+                <button class="btn btn-accept btn-sm" type="submit">Accept</button>
+            </form>
+            <form method="POST" action="{% url 'decline_borrow' req.borrowing_id %}" style="display:inline;">
+                {% csrf_token %}
+                <button class="btn btn-decline btn-sm" type="submit">Decline</button>
+            </form>
+        </div>
+    </div>
+    {% empty %}
+        <div class="detail">There is no borrowing request</div>
+    {% endfor %}
+</div>
+
+</section>
+
+<!-- SECTION B: Pending Fine Validations -->
+<section class="table-container">
+    <h5 class="mt-4" style="color: #3B230A;">Pending Fine Validations</h5>
+
+    {# Karena butuh 7 kolom, kita override grid-template-columns secara inline #}
+    <div class="fine-table-header table-header" style="display:grid; grid-template-columns: 0.2fr 0.8fr 1.3fr 1.6fr 0.6fr 0.6fr 0.8fr; gap:10px;">
+        <div class="checkbox-cell"><input type="checkbox"></div>
+        <div>Username</div>
+        <div>Email</div>
+        <div>Book Title</div>
+        <div>Fine</div>
+        <div>Proof</div>
+        <div class="text-center">Action</div>
+    </div>
+
+    <div class="row-container">
+        {% for req in pending_fines %}
+        <div class="fine-row-content row-content" style="display:grid; grid-template-columns: 0.2fr 0.8fr 1.3fr 1.6fr 0.6fr 0.6fr 0.8fr; gap:10px;">
+            <div class="checkbox-cell"><input type="checkbox"></div>
+            <div class="detail">{{ req.borrower.username }}</div>
+            <div class="detail">{{ req.borrower.email }}</div>
+            <div class="detail">{{ req.book.title }}</div>
+            <div class="detail">Rp. {{ req.denda|floatformat:0 }}</div>
+            <div class="detail">
+                {% if req.fine_proof %}
+                <a href="{{ req.fine_proof.url }}" target="_blank" style="color:#3B230A;text-decoration: none;" class="proof">View</a>
+                {% else %}
+                No Proof
+                {% endif %}
+            </div>
+            <div class="action-button">
+                <form method="POST" action="{% url 'accept_borrow' req.borrowing_id %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button class="btn btn-accept btn-sm" type="submit">Validate</button>
+                </form>
+                <form method="POST" action="{% url 'decline_borrow' req.borrowing_id %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button class="btn btn-decline btn-sm" type="submit">Reject</button>
+                </form>
+            </div>
+        </div>
+        {% empty %}
+        <!-- <div class="fine-row-content row-content" style="display:grid; grid-template-columns: 0.2fr 0.8fr 1.3fr 1.6fr 0.6fr 0.6fr 0.8fr; gap:10px;">
+            <div class="checkbox-cell"></div> -->
+            <div colspan="6" class="detail">There is no fine waiting validation</div>
+        <!-- </div> -->
+        {% endfor %}
+    </div>
+</section>
+
+<script src="{% static 'libraria/js/search.js' %}" defer></script>
+{% endblock %}

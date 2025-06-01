@@ -1,0 +1,36 @@
+{% extends "libraria/base_review.html"%} {% load static %} {% block content %}
+<link rel="stylesheet" href="{% static 'libraria/css/reviewaccount.css' %}" />
+<div class="review-section">
+  <p class="review-label">Book's Review</p>
+  <hr />
+
+  <form method="post" action="{% url 'review_book' book_id=selected_book.book_id %}">
+    {% csrf_token %}
+    <input type="hidden" name="book_id" value="{{ selected_book.book_id }}" />
+
+    <!-- Star‐rating block -->
+    <div class="rating mb-3 d-flex align-items-center gap-2">
+      <div class="rating-text mb-0">Rating</div>
+      <div class="star-rating mb-0">
+        <i class="fa fa-star empty" data-value="1"></i>
+        <i class="fa fa-star empty" data-value="2"></i>
+        <i class="fa fa-star empty" data-value="3"></i>
+        <i class="fa fa-star empty" data-value="4"></i>
+        <i class="fa fa-star empty" data-value="5"></i>
+      </div>
+    </div>
+    <input type="hidden" id="rating-value" name="rating" value="0" />
+
+    <!-- Review -->
+    <div class="mb-3">
+      <textarea class="review-box" name="comment" placeholder="Tuliskan review anda disini..." id="" required></textarea>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="d-flex justify-content-end mt-3">
+      <button type="submit" class="btn custom-btn">Submit</button>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

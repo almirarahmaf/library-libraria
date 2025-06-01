@@ -1,0 +1,104 @@
+{% extends 'libraria/base-user.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'libraria/css/style-dashboard.css'%}">
+<div class="header">
+    <h1>Welcome Back, {{request.user}}!</h1>
+    <p>Your reading adventure starts here</p>
+</div>
+
+<!-- Book of the Month -->
+<section class="mt-5" id="bookMonth">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+        <h3>Book of the Month</h3>
+        <a href="{% url 'see_all' 'book-of-the-month' %}" class="btn btn-sm btn-outline-secondary">See All&nbsp;&nbsp;></a>
+    </div>
+    <div class="row d-flex gap-5 flex-nowrap overflow-auto px-2">
+        {% for book in book_of_the_month %}
+        <div class="col-md-3 border-0 p-3 d-flex flex-row align-items-start" id="sec1">
+            <a href="{% url 'halamanpinjam' book.book_id %}"><img src="{{ book.cover_image.url }}" alt="Percy" style="width: 100px; height: 150px;"></a>
+            <div class="d-flex flex-column justify-content-start" id="detail">
+                <a href="{% url 'halamanpinjam' book.book_id %}" style="text-decoration: none;"><p class="book-title">{{ book.title }}</p></a>
+                <p class="writer" style="z-index: 0;">{{ book.author }}</p>
+                <div class="stars">
+                  {% for i in book.full_stars %}
+                    <i class="fa fa-star"></i>
+                  {% endfor %}
+                  {% for i in book.empty_stars %}
+                    <i class="fa-regular fa-star"></i>
+                  {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+
+<!-- Recommendation -->
+<section class="mt-5" id="recommendation">
+  <div class="d-flex justify-content-between align-items-center mb-2">
+    <h3>Recommendation</h3>
+    <a href="{% url 'see_all' 'recommendation' %}" class="btn btn-sm btn-outline-secondary" id="seeAll2">See All&nbsp;&nbsp;></a>
+  </div>
+
+  <div class="recommendation-wrapper">
+    <div class="recommendation-container">
+      {% for listbook in recommendation %}
+      <div class="recommendation-card">
+        <a href="{% url 'halamanpinjam' listbook.book_id %}"><img src="{{ listbook.cover_image.url }}" alt="Percy" class="cover-img"></a>
+        <div class="detail">
+            <a href="{% url 'halamanpinjam' listbook.book_id %}" class="recom-link">
+                <p class="recom">{{ listbook.title }}</p>
+            </a>
+            <p class="writer2">{{ listbook.author }}</p>
+            <div class="stars2">
+                {% for i in listbook.full_stars %}
+                    <i class="fa fa-star"></i> 
+                {% endfor %}
+                {% for i in listbook.empty_stars %}
+                    <i class="fa-regular fa-star"></i>
+                {% endfor %}
+            </div>
+            <p class="price">Rp {{ listbook.price }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- Librender Star -->
+<section class="mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+        <h3>Librender Star</h3>
+        <a href="{% url 'see_all' 'librender-star' %}" class="btn btn-sm btn-outline-secondary" id="seeAll2">See All&nbsp;&nbsp;></a>
+    </div>
+    <div class="librender-wrapper">
+        <div class="librender-container">
+            {% for user in library_stars %}
+            <a href="{% url 'user_profile' user.signup.id %}" class="text-decoration-none text-dark">
+                <div class="flex-row align-items-start text-center rounded py-4 border" id="librender" style="cursor: pointer;">
+                    {% if user.profile_picture %}
+                        <img src="{{ user.profile_picture.url }}" alt="User" style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%;">
+                    {% else %}
+                        <img src="{% static 'libraria/asset/Profile.jpeg' %}" alt="User" style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%;">
+                    {% endif %}
+                    <h5 class="pt-4 account-name">{{ user.name }}</h5>
+                    <div class="stars2 pt-2">
+                        {% for i in user.full_stars %}
+                            <i class="fa fa-star"></i>
+                        {% endfor %}
+                        {% for i in user.empty_stars %}
+                            <i class="fa-regular fa-star"></i>
+                        {% endfor %}
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{% endblock %}      

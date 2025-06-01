@@ -1,0 +1,195 @@
+/* ======================= */
+/*  reviewaccount.css      */
+/* ======================= */
+
+body {
+  background: #F9F9F5;
+  font-family: 'Jeju Gothic', sans-serif;
+  display: flex;
+  margin: 0;
+  flex-direction: column;
+  height: 100vh;
+}
+
+main{
+  flex: 1;
+}
+
+header {
+  background-color: #CFBBA6;
+  display: flex;
+  align-items: center;
+  padding: 5px;
+}
+
+.d-flex {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.back-icon {
+  margin-right: auto;
+  margin-left: 10px;
+  height: auto;
+}
+
+.tittle {
+  font-size: 30px;
+  text-align: center;
+  color: #3B230A;
+  margin: 0 auto;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #CFBBA6;
+  border-radius: 10px;
+  box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.5);
+  margin: 50px auto;
+  padding: 20px;
+  max-width: 600px;
+}
+
+.book-info {
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.book-cover {
+  max-width: 120px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.book-title {
+  font-size: 18px;
+  color: #3B230A;
+  margin: 0 0 10px 0;
+}
+
+.info {
+  color: #3B230A;
+  font-size: 14px;
+  margin: 0;
+}
+
+hr {
+  background-color: #3B230A;
+  height: 2px;
+  border: none;
+}
+
+.review-section {
+  margin-top: 20px;
+  text-align: left;
+  width: 100%;
+}
+
+.review-label {
+  color: #3B230A;
+  margin-bottom: 10px;
+}
+
+.rating-text {
+  color: #3B230A;
+  margin-bottom: 0px;
+}
+
+.rating {
+  color: #D4AF37;
+  margin-bottom: 20px;
+}
+
+.review-box {
+  width: 100%;
+  max-width: 600px;
+  height: 100px;
+  padding: 10px;
+  background-color: #F9F9F5;
+  border: none;
+  border-radius: 5px;
+  resize: vertical;
+  box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.5);
+}
+
+.review-box::placeholder {
+  color: #CFBBA6;
+}
+
+.review-box:focus {
+  color: #3B230A;
+  border-color: transparent;
+  outline: none;
+}
+
+.custom-btn {
+  background: #3B230A;
+  color: white;
+  text-align: center;
+  border: none;
+  padding: 5px 15px;
+  border-radius: 10px;
+  box-sizing: border-box;
+  box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.5);
+  margin-left: auto;
+  width: 100px;
+}
+
+.custom-btn:hover{
+  background: #F9F9F5;
+  color: #3B230A;
+}
+
+.footer{
+    flex-shrink: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #3B230A;
+    padding-top: 15px;
+    padding-bottom: 10px;
+    padding-right: 20px;
+    padding-left: 20px;
+    font-size: 15px;
+    margin-top: 70px;
+    font-family: 'Jeju Gothic', sans-serif;
+}
+
+.footer h3 {
+  margin-left: 0px;
+  color: #3B230A;
+  font-size: 16px;
+}
+
+.footer .social-media {
+  display: flex;
+  gap: 5px;
+  margin-left: auto;
+  align-items: center;
+}
+
+.footer .fa {
+  font-size: 20px;
+  color: #3B230A;
+}
+
+.star-rating {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.star-rating i {
+  font-size: 15px;
+  color: #3B230A;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.star-rating i.filled {
+  color: #D4AF37;
+}

@@ -1,0 +1,160 @@
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #F9F9F5;
+    overflow-x: hidden;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.container-fluid{
+    flex: 1;
+}
+
+/* navbar */
+h4{
+    margin-left: 35px;
+    margin-top: 10px;
+    color: #3B230A !important;
+    font-family: 'Jeju Gothic', sans-serif;
+}
+
+.navbar{
+    background-color: #CFBBA6;
+    width: 100vw;
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    height: 60px;
+    margin-left: -12px;
+    font-family: 'Jeju Gothic', sans-serif;
+}
+
+.beranda-link{
+    color: #3B230A;
+    text-decoration: none;
+    margin-right: 30px;
+    line-height: 60px;
+}
+
+.beranda-link:hover{
+    text-decoration: underline;
+}
+
+.navbar .profile-photo img{
+    width: 45px;
+    height: 45px;
+    margin-right: 30px;
+    margin-top: 8px;
+    border: 2px solid #3B230A;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.dropdown-menu{
+    background-color: #3B230A;
+    width: fit-content;
+    margin-right: 25px;
+    overflow: hidden;
+    font-size: 15px;
+    padding: 15px !important;
+    cursor: pointer;
+    font-family: 'Jeju Gothic', sans-serif;
+}
+
+.dropdown-menu a{
+    color: #F9F9F5;
+}
+
+.dropdown-menu .name:hover,
+.dropdown-menu .email:hover{
+    background-color: transparent;
+    color: #F9F9F5;
+    text-decoration: underline;
+}
+
+.custom-btn {
+    background-color: transparent;
+    border: 2px solid #F9F9F5;
+    color: #F9F9F5;
+    border-radius: 10px;
+    padding: 3px 8px;
+    white-space: nowrap; 
+    flex: 1 1 auto;
+    text-align: center;
+    margin-top: 20px;
+    font-family: 'Jeju Gothic', sans-serif;
+}
+
+.custom-btn:hover {
+    background-color: #F9F9F5;
+    color: #3B230A;
+}
+
+.dropdown-menu .logout{
+    margin-top: 10px;
+    font-size: 13px;
+}
+
+.dropdown-menu .logout:hover{
+    background-color: transparent;
+    color: #CBDCEB;
+}
+
+.dropdown-menu .logoutbutton img{
+    width: 30px;
+    height: 30px;
+    margin-top: 10px;
+    margin-right: 5px;
+}
+
+.footer{
+    flex-shrink: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #3B230A;
+    padding-top: 15px;
+    padding-bottom: 10px;
+    padding-right: 20px;
+    padding-left: 20px;
+    font-size: 15px;
+    margin-top: 20px;
+    font-family: 'Jeju Gothic', sans-serif;
+}
+
+.footer-left{
+    margin-bottom: -10px;
+}
+
+.footer-right a{
+    color: #3B230A;
+    margin-left: 10px;
+    font-size: 18px;
+    transition: color;
+}
+
+.footer-right a:hover{
+    color: #000000;
+}
+
+@media (max-width: 576px){
+    h4{
+        margin-top: -10px !important;
+    }
+
+    .beranda-link{
+        line-height: 40px !important;
+        margin-left: -100px;
+    }
+
+    .profile-photo img{
+        margin-right: 20px;
+        margin-top: -55px !important;
+    }
+}

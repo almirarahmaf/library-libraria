@@ -1,0 +1,237 @@
+.request{
+  font-size: 30px;
+  color: #3B230A;
+}
+
+.request-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 0 10px;
+}
+
+.search-container {
+  margin-left: auto;
+}
+
+.search-input-wrapper {
+  position: relative; 
+  display: inline-block;
+}
+
+.search-input {
+  padding: 5px 10px 5px 40px;
+  font-size: 14px;
+  border: 2px solid #3B230A;
+  border-radius: 10px;
+  outline: none;
+  transition: all 0.3s ease;
+  color: #3B230A;
+  background-color: #F9F9F5;
+  width: 200px;
+  margin-right: 10px;
+}
+
+.search-input::placeholder {
+  color: rgba(59, 35, 10, 0.50);
+}
+
+.search-input:focus {
+  border-color: #3B230A;
+}
+
+.search-icon{
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  width: 25px; 
+  height: 25px;
+  border-radius: 50%; 
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.table-container {
+  margin-left: 10px;
+  margin-right: 10px;
+  width: 98%;
+}
+
+.table-header {
+  display: grid;
+  grid-template-columns: 0.2fr 1fr 1.5fr 2fr 1fr 1fr;
+  background: #CFBBA6;
+  color: #3B230A;
+  font-size: 16px;
+  padding: 10px 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  text-align: left;
+  margin-bottom: 25px;
+  align-items: center;
+  height: 60px;
+}
+
+.row-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.request-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; 
+  margin-bottom: 10px;
+}
+
+.row-content {
+  display: grid;
+  grid-template-columns: 0.2fr 1fr 1.5fr 2fr 1fr 1fr;
+  align-items: center;
+  text-align: left;
+  background: #F9F9F5;
+  padding: 10px 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  height: 60px;
+}
+
+.row-content div {
+  text-align: left;
+  font-size: 14px;
+}
+
+.checkbox-cell {
+  flex: 0 0 40px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: 10px; 
+}
+
+.checkbox-cell input[type="checkbox"] {
+  margin: 0;
+  transform: scale(1.2);
+}
+
+.detail {
+  color: #3B230A;
+  align-items: center;
+}
+
+a.proof:hover {
+  text-decoration: underline !important;
+}
+
+.action-button {
+  display: flex;
+  justify-content: center; 
+  gap: 10px; 
+}
+
+.btn-accept {
+  flex: 1;
+  background-color: #3B230A;
+  color: #F9F9F5;
+  text-align: center;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 15px;
+  margin: 0 auto;
+}
+
+.btn-accept:hover{
+  background-color: #F9F9F5;
+  color: #3B230A;
+  border: 2px solid #3B230A;
+  padding: 3px 8px;
+  border-radius: 15px;
+}
+
+.btn-decline {
+  flex: 1;
+  background-color: #B80E0E;
+  color: white;
+  text-align: center;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 15px;
+  margin: 0 auto;
+}
+
+.btn-decline:hover{
+  background-color: #F9F9F5;
+  color: #B80E0E;
+  border: 2px solid #B80E0E;
+  padding: 3px 8px;
+  border-radius: 15px;
+}
+
+@media screen and (max-width: 768px) {
+  .table-header,
+  .row-content {
+      grid-template-columns: 30px 1fr 1fr 1fr 1fr;
+      height: auto;
+  }
+
+  .table-header{
+      text-align: left;
+      font-size: 14px;
+      margin-bottom: 15px;
+  }
+  .row-content{
+      text-align: left;
+      font-size: 10px;
+  }
+  
+  .checkbox-cell {
+      justify-content: flex-start;
+  }
+
+  .action-button {
+      display: flex;
+      flex-direction: row; 
+      gap: 10px;
+      justify-content: flex-start;
+      align-items: center;
+  }
+
+  .btn-accept,
+  .btn-decline {
+      padding: 4px 8px;
+      font-size: 12px;
+      border-radius: 15px;
+      min-width: 60px;
+      height: auto;
+       box-sizing: border-box;
+  }
+
+  .btn-accept {
+      background-color: #3B230A;
+      color: #F9F9F5;
+      border: none;
+  }
+
+  .btn-accept:hover {
+      background-color: #F9F9F5;
+      color: #3B230A;
+      border: 2px solid #3B230A;
+      padding: 2px 6px;
+  }
+
+  .btn-decline {
+      background-color: #B80E0E;
+      color: white;
+      border: none;
+  }
+
+  .btn-decline:hover {
+      background-color: #F9F9F5;
+      color: #B80E0E;
+      border: 2px solid #B80E0E;
+      padding: 2px 6px;
+  }
+}

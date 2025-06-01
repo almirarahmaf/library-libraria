@@ -1,0 +1,70 @@
+{% extends 'libraria/base-user.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="stylesheet" href="{% static 'libraria/css/style-books-category.css' %}">
+
+<div class="container mt-3">
+    <h3>{{ section_title }}</h3>
+    
+    {% if type == 'book' %}
+    <div class="row d-flex gap-3 p-2 rounded" id="book">
+        {% for book in items %}
+        <div class="card-book">
+            <a href="{% url 'halamanpinjam' book.book_id %}"><img src="{{ book.cover_image.url }}" alt="{{ listbook.title }}" class="img-cover"></a>
+            <div class="justify-content-start mt-2" id="detail">
+                <a href="{% url 'halamanpinjam' book.book_id %}"><p>{{ book.title }}</p></a>
+                <p class="writer">{{ book.author }}</p> 
+                <div class="stars">
+                    {% for i in book.full_stars %}
+                        <i class="fa fa-star"></i> 
+                    {% endfor %}
+                    {% for i in book.empty_stars %}
+                        <i class="fa-regular fa-star"></i>
+                    {% endfor %}
+                </div>
+                <p class="recom">Rp.{{ book.price }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% elif type == 'profile' %}
+    <div class="row custom-profile-row row-cols-2 row-cols-md-2 row-cols-lg-5 mt-3 profile">
+        {% for profile in items %}
+            {% if profile.signup %}
+                <a href="{% url 'user_profile' profile.signup.id %}" class="text-decoration-none text-dark">
+            {% else %}
+                <div class="text-decoration-none text-dark">
+            {% endif %}
+                    <div class="col text-center">
+                        <div class="card p-3" style="height: 220px; width: 200px;">
+                            <img src="{{ profile.profile_picture.url }}" class="card-img-top rounded-circle mx-auto" alt="photo">
+                            <div class="card-body">
+                                <h5 class="card-title" style="font-size: 16px; color: #3B230A;">{{ profile.name }}</h5>
+                                <p class="card-text" style="font-size: 14px;">{{ profile.bio }}</p>
+                                <div class="stars mb-1">
+                                    {% for i in profile.full_stars %}
+                                        <i class="fa fa-star"></i> 
+                                    {% endfor %}
+                                    {% for i in profile.empty_stars %}
+                                        <i class="fa-regular fa-star"></i>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            {% if profile.signup %}
+                </a>
+            {% else %}
+                </div>
+            {% endif %}
+
+        {% endfor %}
+    </div>
+    {% else %}
+    <p>No content found.</p>
+    {% endif %}
+</div>
+{% endblock %}

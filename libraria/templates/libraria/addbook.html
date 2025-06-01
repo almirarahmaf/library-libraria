@@ -1,0 +1,50 @@
+{% extends "libraria/base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'libraria/css/addbook.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="content">
+    <p class="book-info">Book Information</p>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="book-container">
+            {% for field in form %}
+                <div class="mb-1">
+                    <label class="detail">{{ field.label }}</label>
+                    {{ field }}
+                    {{ field.errors }}
+                </div>
+            {% endfor %}
+
+            <div class="button-group">
+                <a href="{% url 'librender' %}" class="btn btn-back">Back</a>
+                <button type="submit" class="btn btn-save">Save</button>
+            </div>                   
+        </div>
+    </form>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+        const selects = document.querySelectorAll("select.form-control");
+
+        selects.forEach(function (select) {
+            function setColor() {
+                if (select.value === "") {
+                    select.style.color = "rgba(59, 35, 10, 0.50)";
+                } else {
+                    select.style.color = "#3B230A";
+                }
+            }
+
+            setColor();
+
+            select.addEventListener("change", setColor);
+            });
+        });
+    </script>
+</div>
+{% endblock %}

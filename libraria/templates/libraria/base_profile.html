@@ -1,0 +1,60 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/earlyaccess/jejugothic.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="{% static 'libraria/css/style_base_profile.css' %}">
+    <title>Libraria: Limitless Book Borrowing</title>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="container-fluid">
+        {% comment %} navbar {% endcomment %}
+        <nav class="navbar navbar-expand-sm">
+            <h4>My Profile</h4>
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a href= "{% url 'dashboard' %}" class="beranda-link">Dashboard</a> 
+                </li>
+                <li class="nav-item profile-photo dropdown">
+                    <img src = "{{ user.profile.profile_picture.url }}" alt="Profile" class="dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a href="{% url 'profile' %}" class="dropdown-item name">{{request.user}}</a></li>
+                        <li><a class="dropdown-item email">{{request.user.email}}</a></li>
+                        <li class="d-flex justify-content-between gap-2 px-2">
+                            <a href="{% url 'librender' %}"><button type="button" class="custom-btn">Librender</button></a>
+                            <a href="{% url 'editProfile' %}"><button type="button" class="custom-btn">Edit Profile</button></a>
+                        </li>
+                        <li class="d-flex align-items-center text-end logoutbutton">
+                            <a class="dropdown-item logout" href="{% url 'logout' %}">Log Out</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+
+        {% block content %}
+        {% endblock content %}
+    </div>
+    <footer class="footer">
+            <div class="footer-left">
+                <p>Libraria</p>
+            </div>
+            <div class="footer-right">
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-github"></i></a>
+            </div>
+    </footer>
+    
+    <script src="{% static 'libraria/js/script.js' %}"></script>
+</body>
+</html>

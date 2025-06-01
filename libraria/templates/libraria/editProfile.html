@@ -1,0 +1,50 @@
+{% extends "libraria/base_profile.html" %}
+{% load static %}
+
+{% block content %}
+<link href="{% static 'libraria/css/style_base_editProfile.css' %}" rel="stylesheet">
+<link href="{% static 'libraria/css/style_editProfile.css' %}" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"> 
+
+<div class="container">
+    {% include "libraria/base_editProfile.html" %}
+
+    <form action="{% url 'editProfile' %}" method="POST" enctype="multipart/form-data" class="editForm d-flex flex-column justify-content-center align-items-center mt-4">
+        {% csrf_token %}
+        
+        <div class="form-file">
+            <label for="file-field" class="form-label file-label">Photo Profile</label>
+            <input class="form-control" type="file" id="file-field" name="profile_picture" accept="image/*">
+        </div>
+
+        <div class="form-name">
+            <label for="name-field">Name</label>
+            <input type="text" class="form-control" id="name-field" name="name" value="{{ user_profile.name }}" placeholder="Enter name" maxlength="12" required>
+        </div>
+
+        <div class="form-bio">
+            <label for="bio-field">Bio</label>
+            <input type="text" class="form-control" id="bio-field" name="bio" value="{{ user_profile.bio }}" maxlength="10">
+        </div>
+
+        <div class="form-address">
+            <label for="address-field">Address</label>
+            <textarea class="form-control" id="address-field" rows="3" name="address" required>{{ user_profile.address }}</textarea>
+        </div>
+
+        <div class="form-phone">
+            <label for="phone-field">Phone Number</label>
+            <input type="tel" class="form-control" id="phone-field" value="{{ user_profile.phone }}" name="phone" pattern="[0-9]{12}" maxlength="12" required>
+        </div>
+
+        <div class="form-account">
+            <label for="account-field">Account Number</label>
+            <input type="text" class="form-control" id="account-field" value="{{ user_profile.account }}" name="account" maxlength="17" inputmode="numeric" pattern="\d+" required>
+        </div>
+
+        <div class="d-flex justify-content-end">
+            <button class="btn mt-3" type="submit">Save</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

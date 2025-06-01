@@ -1,0 +1,111 @@
+{% extends "libraria/base-user.html" %}
+{% load static %}
+
+{% block content %}
+<link href="{% static 'libraria/css/style_profile.css' %}" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"> 
+
+<div class= "container">
+    <div class="profile-card dflex align-items-center">
+        <div class="row">
+            <div class="col-3 d-flex flex-column align-items-center" id="userProfile">
+                <img src="{{ user.profile.profile_picture.url }}" alt="profile" class="profile-image me-4">
+                <div class="average-rating">
+                    {% for star in full_stars %}
+                        <i class="fa fa-star"></i>
+                    {% endfor %}
+                    
+                    {% for star in empty_stars %}
+                        <i class="fa fa-star-o" style="color: transparent; -webkit-text-stroke: 1px #b4942a;"></i>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-md-9 col-12" id="details">
+                <h3>{{ user_profile.name }}</h3>
+                <p>{{ user_profile.bio }}</p>
+                <div class="d-flex flex-wrap align-items-center gap-2 phone">
+                    <i class="fa fa-phone"></i>
+                    <p class="mb-0">{{ user_profile.phone }}</p>
+                    <i class="fa fa-calendar ms-3"></i>
+                    <p class="mb-0">{{ join_date|date:"Y/m/d" }}</p>
+                </div>
+                <div class="d-flex align-items-center map mt-2">
+                    <i class="fa fa-map-marker"></i>
+                    <p class="mb-0 ms-2">{{ user_profile.address }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h5 class="mt-5 mb-3">My Book</h5>
+    <div class="row g-3">
+        <!-- Book Cards -->
+        {% for i in "123456789"|make_list %}
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+            <div class="book-card">
+                <img src="{% static 'libraria/asset/Cover.png' %}" class="img-fluid" alt="Book">
+                <p class="fw-bold mb-0">Percy Jackson and The Olympians I</p>
+                <small class="text-muted">Rick Riordan</small>
+                <div class="star-rating book">
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star"></i>
+                </div>
+                <p class="fw-bold">Rp15,000</p>
+            </div>
+        </div>
+        {% endfor %}
+      
+      <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+        <div class="book-card">
+          <img src="{% static 'libraria/asset/bookcover.png' %}" class="img-fluid book-cover" alt="Book">
+          <p class="fw-bold mb-0">Percy Jackson and The Olympians I</p>
+          <small class="text-muted">Rick Riordan</small>
+          <div class="star-rating book">
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star"></i>
+          </div>
+          <p class="fw-bold">Rp15,000</p>
+        </div>
+      </div>
+
+      <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+        <div class="book-card">
+          <img src="{% static 'libraria/asset/bookcover.png' %}" class="img-fluid" alt="Book">
+          <p class="fw-bold mb-0">Percy Jackson and The Olympians I</p>
+          <small class="text-muted">Rick Riordan</small>
+          <div class="star-rating book">
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star"></i>
+          </div>
+          <p class="fw-bold">Rp15,000</p>
+        </div>
+      </div>
+
+      <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+        <div class="book-card">
+          <img src="{% static 'libraria/asset/bookcover.png' %}" class="img-fluid" alt="Book">
+          <p class="fw-bold mb-0">Percy Jackson and The Olympians I</p>
+          <small class="text-muted">Rick Riordan</small>
+          <div class="star-rating book">
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star"></i>
+          </div>
+          <p class="fw-bold">Rp15,000</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
