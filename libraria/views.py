@@ -419,6 +419,7 @@ def delete_borrowing(request, pk):
 @allowed_users(allowed_roles=['user'])
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def addbook(request):
+    user_profile = Profile.objects.get(signup=request.user)
     if request.method == 'POST':
         form = addbookForm(request.POST, request.FILES)
         if form.is_valid():
@@ -430,7 +431,7 @@ def addbook(request):
         form = addbookForm()
 
     categories = category.objects.all()
-    return render(request, 'libraria/addbook.html', {'form': form, 'categories': categories})
+    return render(request, 'libraria/addbook.html', {'form': form, 'categories': categories, 'user_profile': user_profile,})
 
 # Edit Book
 @login_required(login_url='login')
