@@ -18,9 +18,9 @@
         {% if book_list %}
             {% for listbook in book_list %}
                 <div class="card-book">
-                    <a href="{% url 'halamanpinjam' book.book_id %}"><img src="{{ listbook.cover_image.url }}" alt="{{ listbook.title }}" class="img-cover"></a>
+                    <a href="{% url 'halamanpinjam' listbook.book_id %}"><img src="{{ listbook.cover_image.url }}" alt="{{ listbook.title }}" class="img-cover"></a>
                     <div class="justify-content-start mt-2" id="detail">
-                        <a href="{% url 'halamanpinjam' book.book_id %}"><p>{{ listbook.title }}</p></a>
+                        <a href="{% url 'halamanpinjam' listbook.book_id %}"><p>{{ listbook.title }}</p></a>
                         <p class="writer">{{ listbook.author }}</p> 
                         <div class="stars">
                             {% for i in listbook.full_stars %}

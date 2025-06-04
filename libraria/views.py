@@ -374,11 +374,11 @@ def decline_borrow(request, pk):
 @allowed_users(allowed_roles=['user'])
 def list_view(request):
     user_profile = Profile.objects.get(signup=request.user)
-    borrowings = borrowing.objects.select_related('borrower', 'book').all()
+    borrowings = borrowing.objects.select_related('borrower', 'book').filter(book__librender=request.user)
     return render(request, 'libraria/list.html', {
         'borrowings': borrowings,
         'user_profile' : user_profile,
-        })
+    })
 
 # Delete Borrowing
 @login_required(login_url='login')
