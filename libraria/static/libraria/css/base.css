@@ -46,26 +46,14 @@ header {
   gap: 10px;
 }
 
-.btn-add {
-  flex: 1;
-  background-color: #3B230A;
-  color: white;
-  text-align: center;
-  border: none;
-  padding: 5px 10px;
-  border-radius: 10px;
-  box-sizing: border-box;
-  box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.5);
-  width: 100px;
-  margin-right: 20px;
+.beranda-link{
+    color: #3B230A;
+    text-decoration: none;
+    margin-right: 20px;
 }
 
-.btn-add:hover{
-  background-color: #F9F9F5;
-  color: #3B230A;
-  border: 2px solid #3B230A;
-  padding: 3px 8px;
-  border-radius: 10px;
+.beranda-link:hover{
+    text-decoration: underline;
 }
 
 .book {

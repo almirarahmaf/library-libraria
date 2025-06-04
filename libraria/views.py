@@ -210,13 +210,11 @@ def profile(request):
 @allowed_users(allowed_roles=['user'])
 def user_profile(request, user_id):
     try:
-        # Ambil profile user yang dipanggil berdasarkan user_id
         user_profile = Profile.objects.get(signup__id=user_id)
         def chunk_reviews(reviews, size=3):
             args = [iter(reviews)] * size
             return [list(filter(None, chunk)) for chunk in zip_longest(*args)]
 
-        # Ambil review untuk user tersebut
         reuser = review_user.objects.filter(reviewee=user_profile.signup)
         total_reviews = reuser.count()
 
@@ -226,10 +224,6 @@ def user_profile(request, user_id):
         else:
             average_rating = 0
 
-        # full_stars = list(range(int(average_rating)))
-        # empty_stars = list(range(5 - len(full_stars)))
-
-        # Ambil daftar buku user tersebut
         books = booklist.objects.filter(librender=user_profile.signup)
 
         review_chunks = chunk_reviews(reuser, size=3)
@@ -238,8 +232,6 @@ def user_profile(request, user_id):
             'user_profile': user_profile,
             'join_date': user_profile.signup.date_joined,
             'reuser': reuser,
-            # 'full_stars': full_stars,
-            # 'empty_stars': empty_stars,
             'average_rating': average_rating,
             'books': books,
             'review_chunks': review_chunks,
@@ -307,19 +299,11 @@ def librender(request):
 @allowed_users(allowed_roles=['user'])
 def request_book(request):
     user_profile = Profile.objects.get(signup=request.user)
-    """
-    Menampilkan di satu halaman:
-     1) Semua borrowing dengan status='Pending' untuk buku milik user yang sedang login.
-     2) Semua borrowing dengan status='FinePending' (bukti denda sudah diupload, 
-        menunggu validasi) untuk buku milik user yang sedang login.
-    """
-    # 1. Semua pinjaman baru (Pending) untuk buku milik request.user
     pending_requests = borrowing.objects.filter(
         status='Pending',
         book__librender=request.user
     ).select_related('borrower', 'book')
 
-    # 2. Semua peminjaman dengan denda menunggu validasi (FinePending) untuk buku milik request.user
     pending_fines = borrowing.objects.filter(
         status='FinePending',
         book__librender=request.user
@@ -331,15 +315,13 @@ def request_book(request):
         'user_profile' : user_profile,
     }
     return render(request, 'libraria/request.html', context)
-    # return render(request, 'libraria/request.html', {'requests': requests})
-
+    
 # Accept Borrow
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['user'])
 def accept_borrow(request, pk):
     borrow = get_object_or_404(borrowing, borrowing_id=pk, book__librender=request.user)
 
-    # 1) Jika statusnya Pending → berarti ini “accept borrow request”
     if borrow.status == 'Pending' and borrow.book.stock > 0:
         borrow.status = 'Borrowed'
         borrow.book.stock -= 1
@@ -348,14 +330,11 @@ def accept_borrow(request, pk):
         messages.success(request, "Borrow request accepted. Book is now Borrowed.")
         return redirect('request')
 
-    # 2) Jika statusnya FinePending → berarti ini “validate fine proof”
     if borrow.status == 'FinePending':
-        # Pastikan borrower sudah upload fine_proof dan is_fine_paid=True
         if borrow.is_fine_paid:
             borrow.status = 'Returned'
             borrow.return_date = date.today()
             borrow.save(update_fields=['status','return_date'])
-            # kembalikan stok
             book = borrow.book
             book.stock += 1
             book.save(update_fields=['stock'])
@@ -363,8 +342,7 @@ def accept_borrow(request, pk):
         else:
             messages.error(request, "Fine proof belum ter‐upload atau belum valid.")
         return redirect('request')
-
-    # Jika kondisi lain (misalnya stok habis atau status bukan Pending/FinePending)
+    
     messages.error(request, "Tidak bisa mem‐process request ini.")
     return redirect('request')
 
@@ -374,16 +352,13 @@ def accept_borrow(request, pk):
 def decline_borrow(request, pk):
     borrow = get_object_or_404(borrowing, borrowing_id=pk, book__librender=request.user)
 
-    # 1) Jika statusnya Pending → “decline borrow request”
     if borrow.status == 'Pending':
         borrow.status = 'Declined'
         borrow.save(update_fields=['status'])
         messages.info(request, "Borrow request has been declined.")
         return redirect('request')
 
-    # 2) Jika statusnya FinePending → “reject fine proof”
     if borrow.status == 'FinePending':
-        # Kembali ke keadaan “still Borrowed” (karena denda ditolak)
         borrow.status = 'Borrowed'
         borrow.fine_proof = None
         borrow.is_fine_paid = False
@@ -458,7 +433,6 @@ def deletebook(request, book_id):
 
     if request.method == 'POST':
         book.delete()
-        messages.success(request, 'Book deleted successfully!')
         return redirect('librender')
     else:
         return redirect('libbrender')
@@ -467,25 +441,17 @@ def deletebook(request, book_id):
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['user'])
 def validate_fine(request, borrowing_id):
-    """
-    Hanya pemilik buku (librender) yang dapat memvalidasi bukti denda.
-    Setelah valid, set is_fine_paid=True dan status kembali ke 'Borrowed' agar user bisa Return.
-    """
     borrow_req = get_object_or_404(borrowing, borrowing_id=borrowing_id)
 
-    # Pastikan user ini adalah pemilik (librender) buku
     if request.user != borrow_req.book.librender:
         messages.error(request, "Anda tidak berhak memvalidasi denda ini.")
         return redirect('rak_pinjam')
 
-    # Pastikan status sekarang 'FinePending'
     if borrow_req.status != 'FinePending':
         messages.error(request, "Tidak ada denda yang perlu divalidasi untuk transaksi ini.")
         return redirect('rak_pinjam')
 
-    # Lakukan validasi (misal admin/librender melihat bukti, kemudian menekan tombol Approve)
     borrow_req.is_fine_paid = True
-    # Kita kembalikan status ke 'Borrowed' supaya user dapat menekan “Return” lagi
     borrow_req.status = 'Borrowed'
     borrow_req.save(update_fields=['is_fine_paid', 'status'])
     messages.success(request, "Denda telah divalidasi. Peminjam dapat mengembalikan bukunya sekarang.")
@@ -495,16 +461,13 @@ def validate_fine(request, borrowing_id):
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['user'])
 def halamanpinjam(request, book_id):
-    # Jika user belum login, redirect ke halaman login
     if not request.user.is_authenticated:
-        return redirect('login')   # ganti 'login' dengan nama URL login Anda
+        return redirect('login')  
 
-    # Ambil buku & profil pemilik
     selected_book = get_object_or_404(booklist, book_id=book_id)
     librarian_user = selected_book.librender
     librarian_profile = Profile.objects.get(signup=librarian_user)
 
-    # Ambil existing_request & last_request
     last_request = (
         borrowing.objects
         .filter(borrower=request.user, book=selected_book)
@@ -518,25 +481,20 @@ def halamanpinjam(request, book_id):
         .first()
     )
 
-    # Ambil semua review (QuerySet)
     review_qs = (
         review_book.objects
         .filter(booktitle=selected_book)
         .order_by('booktitle_id')
     )
 
-    # Pastikan menjadi list (agar mudah di‐chunk)
     review_list = list(review_qs)
 
-    # Chunk tiap 3 review
     review_chunks = [review_list[i : i + 3] for i in range(0, len(review_list), 3)]
 
-    # Hitung rata‐rata rating (jika tidak ada, ambil 0.0)
     avg_rating = review_qs.aggregate(avg=Avg('rating'))['avg'] or 0.0
     full_stars = int(math.floor(avg_rating))
     has_half   = (avg_rating - full_stars) >= 0.5
 
-    # Biaya
     shipping_cost = 7500
     total_price   = selected_book.price + shipping_cost
 
@@ -545,7 +503,7 @@ def halamanpinjam(request, book_id):
         'librarian_profile': librarian_profile,
         'existing_request':  existing_request,
         'last_request':      last_request,
-        'review_chunks':     review_chunks,   # selalu list (bisa [])
+        'review_chunks':     review_chunks,   
         'full_stars':        full_stars,
         'has_half':          has_half,
         'shipping_cost':     shipping_cost,
@@ -584,7 +542,6 @@ def borrow_book(request, book_id):
             messages.error(request, "Bukti pembayaran wajib diunggah.")
             return redirect('halamanpinjam', book_id=book_id)
 
-        # Hitung return_date = hari ini + (7 × minggu)
         today                = timezone.now().date()
         due_date    = today + timedelta(weeks=duration_weeks)
 
@@ -594,10 +551,6 @@ def borrow_book(request, book_id):
             existing_request.save()
             messages.success(request, "Bukti pembayaran berhasil diunggah. Tunggu konfirmasi pemilik.")
             return redirect('halamanpinjam', book_id=book_id)
-
-        # # Baru buat record peminjaman
-        # selected_book.stock -= 1
-        # selected_book.save()
 
         new_borrow = borrowing.objects.create(
             borrower = request.user,
@@ -615,24 +568,16 @@ def borrow_book(request, book_id):
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['user'])
 def return_book(request, borrowing_id):
-    """
-    Dipanggil saat user mengembalikan buku.
-    1) Jika user mengunggah bukti denda → simpan fine_proof, set status='FinePending'
-    2) Jika user menekan Return (return_action) → hitung denda, bila sudah bayar → set status='Returned'
-    """
     borrow_req = get_object_or_404(borrowing, borrowing_id=borrowing_id)
 
-    # Pastikan hanya borrower yang dapat memproses
     if request.user != borrow_req.borrower:
         messages.error(request, "Anda bukan peminjam buku ini.")
         return redirect('rak_pinjam')
 
-    # Hanya status 'Borrowed' atau 'FinePending' yang bisa diproses di sini
     if borrow_req.status not in ['Borrowed', 'FinePending']:
         messages.error(request, "Buku tidak dalam status yang dapat di-return.")
         return redirect('rak_pinjam')
 
-    # 1) User mengunggah bukti denda
     if request.method == 'POST' and 'fine_proof' in request.FILES:
         fine_file = request.FILES.get('fine_proof')
         if not fine_file:
@@ -650,22 +595,17 @@ def return_book(request, borrowing_id):
         )
         return redirect('rak_pinjam')
 
-    # 2) User menekan tombol Return
     if request.method == 'POST' and 'return_action' in request.POST:
-        # Jika status FinePending dan bukti sudah valid (is_fine_paid=True), izinkan lanjut
         if borrow_req.status == 'FinePending' and not borrow_req.is_fine_paid:
             messages.error(request, "Anda harus membayar denda terlebih dahulu.")
             return redirect('rak_pinjam')
 
-        # Jika status selain 'Borrowed' atau (FinePending dengan is_fine_paid=True), batalkan
         if borrow_req.status == 'FinePending' and borrow_req.is_fine_paid:
-            # Anggap seperti status 'Borrowed' untuk perhitungan denda
             pass
         elif borrow_req.status != 'Borrowed':
             messages.error(request, "Buku tidak dalam status ‘Borrowed’, tidak bisa di-return.")
             return redirect('rak_pinjam')
 
-        # Tentukan due_date
         if borrow_req.due_date is None:
             due_date = borrow_req.borrow_date + timedelta(days=7)
         else:
@@ -673,15 +613,13 @@ def return_book(request, borrowing_id):
 
         today = date.today()
 
-        # Hitung selisih hari terlambat
         terlambat = (today - due_date).days
         jumlah_denda = terlambat * 3000 if terlambat > 0 else 0
 
-        # Simpan nilai denda
         borrow_req.denda = jumlah_denda
         borrow_req.save(update_fields=['denda'])
 
-        # Jika ada denda dan belum bayar, minta user unggah bukti dulu
+
         if jumlah_denda > 0 and not borrow_req.is_fine_paid:
             messages.error(
                 request,
@@ -689,12 +627,10 @@ def return_book(request, borrowing_id):
             )
             return redirect('rak_pinjam')
 
-        # Proses return
         borrow_req.status = 'Returned'
         borrow_req.return_date = today
         borrow_req.save(update_fields=['status', 'return_date'])
 
-        # Kembalikan stok buku satu unit
         buku = borrow_req.book
         buku.stock += 1
         buku.save()
@@ -709,29 +645,22 @@ def return_book(request, borrowing_id):
 
         return redirect('rak_pinjam')
 
-    # Jika bukan POST atau tidak sesuai, redirect kembali
     return redirect('rak_pinjam')
 
 # Review User
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['user'])
 def review_user_view(request, book_id):
-    """
-    Jika GET: tampilkan form review pemilik.
-    Jika POST: simpan review ke tabel review_user, lalu set status borrowing='Finished'.
-    """
     selected_book = get_object_or_404(booklist, book_id=book_id)
     reviewee_user = selected_book.librender
     owner_profile = Profile.objects.get(signup=reviewee_user)
 
-    # Ambil record peminjaman terakhir dengan status 'Returned' (belum finished)
     borrow_rec = borrowing.objects.filter(
         borrower=request.user,
         book=selected_book,
         status='Returned'
     ).order_by('-borrow_date').first()
 
-    # Jika tidak ada record certain, user tidak boleh review pemilik
     if not borrow_rec:
         messages.error(request, "Anda tidak dapat melakukan review pemilik saat ini.")
         return redirect('rak_pinjam')
@@ -751,7 +680,6 @@ def review_user_view(request, book_id):
             messages.error(request, "Kolom komentar tidak boleh kosong.")
             return redirect('review_user', book_id=book_id)
 
-        # Simpan review pemilik
         try:
             review_user.objects.create(
                 reviewer=request.user,
@@ -764,7 +692,6 @@ def review_user_view(request, book_id):
             messages.error(request, "Terjadi kesalahan saat menyimpan ulasan.")
             return redirect('review_user', book_id=book_id)
 
-        # Setelah review pemilik, set status borrowing menjadi 'Finished'
         borrow_rec.status = 'Finished'
         borrow_rec.save()
 
@@ -782,14 +709,9 @@ def review_user_view(request, book_id):
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['user'])
 def review_book_view(request, book_id):
-    """
-    Jika GET: tampilkan form review buku.
-    Jika POST: simpan review ke tabel review_book, lalu redirect ke review_user.
-    """
     selected_book = get_object_or_404(booklist, book_id=book_id)
     librarian_profile = Profile.objects.get(signup=selected_book.librender)
 
-    # Ambil record peminjaman terakhir dengan status 'Returned' (belum finished)
     borrow_rec = borrowing.objects.filter(
         borrower=request.user,
         book=selected_book,
@@ -811,7 +733,6 @@ def review_book_view(request, book_id):
             messages.error(request, "Kolom review tidak boleh kosong.")
             return redirect('review_book', book_id=book_id)
 
-        # Simpan review buku
         try:
             review_book.objects.create(
                 username=request.user,
@@ -824,10 +745,8 @@ def review_book_view(request, book_id):
             messages.error(request, "Terjadi kesalahan saat menyimpan review.")
             return redirect('review_book', book_id=book_id)
 
-        # Setelah review buku, langsung ke review pemilik
         return redirect('review_user', book_id=book_id)
 
-    # GET: render form review
     context = {
         'selected_book': selected_book,
         'librarian_profile': librarian_profile,
@@ -842,13 +761,9 @@ def rak_pinjam(request):
     user_profile = Profile.objects.get(signup=request.user)
     all_borrowings = borrowing.objects.filter(borrower=request.user).order_by('-borrow_date')
 
-    # 1) Peminjaman aktif: status Pending atau Borrowed
     active_statuses = ['Pending', 'Borrowed', 'FinePending']
     active_borrowings = all_borrowings.filter(status__in=active_statuses)
 
-    # 2) Peminjaman selesai (history): status Returned atau Finished
-    #    jika Anda sudah menambahkan opsi 'Finished' di model, atau bila
-    #    belum, cukup pakai 'Returned' sebagai penanda selesai.
     finished_statuses = ['Returned', 'Finished']
     finished_borrowings = all_borrowings.filter(status__in=finished_statuses)
 

@@ -5,7 +5,7 @@
     <a href="javascript:history.back()" class="ms-3">
       <img src="{% static 'libraria/asset/Frame (2).png' %}" alt="Icon" class="back-icon" width="37px" />
     </a>
-    <p class="tittle m-0" style="color: #3b230a;">BORROWING</p>
+    <p class="tittle m-0" style="color: #3b230a">BORROWING</p>
     <div style="width: 37px" class="me-3"></div>
   </header>
 
@@ -17,9 +17,9 @@
           <h4 class="text-center mb-4">Book Details</h4>
           <div class="row">
             <div class="col-md-4 text-center">
-              <img src="{{ selected_book.cover_image.url }}" style="width: 150px; height: 200px; margin-top: 20px;" class="img-fluid rounded" alt="{{ selected_book.title }}" />
+              <img src="{{ selected_book.cover_image.url }}" style="width: 150px; height: 200px; margin-top: 20px" class="img-fluid rounded" alt="{{ selected_book.title }}" />
             </div>
-            <div class="col-md-8 mt-3 isi" >
+            <div class="col-md-8 mt-3 isi">
               <h5>{{ selected_book.title }}</h5>
               <p class="detail text-white">
                 {{ selected_book.author }} | {{ selected_book.publisher }} | {{ selected_book.years }} | {{ selected_book.number_of_pages }} Pages | {{ selected_book.category.category_name }}
@@ -63,7 +63,7 @@
                     <div class="col-6 col-md-4">
                       <div class="comment-card">
                         <div class="d-flex gap-2">
-                          <img src="{{ rev.username.profile.profile_picture.url }}" class="photo" alt="Profile" style="border: 2px solid #3b230a;"/>
+                          <img src="{{ rev.username.profile.profile_picture.url }}" class="photo" alt="Profile" style="border: 2px solid #3b230a" />
                           <div class="comment-author">
                             <div class="fw-bold">{{ rev.username.username }}</div>
                             <div class="text-muted small">{{ rev.username.profile.bio }}</div>
@@ -102,17 +102,20 @@
           <h5>Librender</h5>
           <div class="d-flex align-items-center">
             <img src="{% static 'libraria/asset/person.png' %}" alt="Logo" style="width: 28px; height: 32px" class="me-2" />
-            <div>
-              {{ librarian_profile.name }}
-            </div>
+            <div>{{ librarian_profile.name }}</div>
           </div>
 
           <h5 class="mt-5">Contact</h5>
           <div class="d-flex align-items-center mb-5">
             <img src="{% static 'libraria/asset/telephone.png' %}" alt="Logo" style="width: 28px; height: 32px" class="me-2" />
             <div>
-              <a href="https://wa.me/62{{ librarian_profile.phone|slice:'1:' }}?text=Halo%20Librender!%0ASaya%20ingin%20bertanya%20tentang%20buku%20{{selected_book.title}}" target="_blank" style="color: #3B230A; text-decoration: none;" class="no-contact">
-                  {{ librarian_profile.phone }}
+              <a
+                href="https://wa.me/62{{ librarian_profile.phone|slice:'1:' }}?text=Halo%20Librender!%0ASaya%20ingin%20bertanya%20tentang%20buku%20{{selected_book.title}}"
+                target="_blank"
+                style="color: #3b230a; text-decoration: none"
+                class="no-contact"
+              >
+                {{ librarian_profile.phone }}
               </a>
             </div>
           </div>
@@ -125,7 +128,7 @@
           <button class="btn btn-dark btn-borrow" type="button" disabled>Borrow</button>
           {% elif existing_request.status == "Borrowed" %}
           <p class="status mt-2" style="color: #3b230a">This book is already borrowed by you!</p>
-          <button class="btn btn-dark btn-borrow" data-bs-toggle="modal" data-bs-target="#ticketModal" type="button">Show Ticket</button>
+          <button class="btn btn-dark btn-borrow" data-bs-toggle="modal" data-bs-target="#ticketModal{{ existing_request.borrowing_id }}" type="button">Show Ticket</button>
           {% endif %} {% else %} {% if last_request %} {% if last_request.status == "Declined" %}
           <p class="status text-danger mt-2">Your request has been declined</p>
           <button class="btn btn-dark btn-borrow" data-bs-toggle="modal" data-bs-target="#borrowModal" type="button">Borrow Again</button>
@@ -234,19 +237,17 @@
                 </div>
 
                 <div class="mb-3">
-                  <label for="payment_proof" class="form-label">Upload Bukti Pembayaran <span class="text-danger">*</span></label>
+                  <label for="payment_proof" class="form-label">Upload Payment Proof <span class="text-danger">*</span></label>
                   <input type="file" class="form-control form-control-sm" id="payment_proof" name="payment_proof" accept="image/*" required />
                 </div>
               </div>
 
               <!-- Modal footer -->
               <div class="modal-footer">
-                {% if existing_request and existing_request.payment_proof %}
-                <button type="button" class="btn btn-secondary btn-sm" disabled>Sudah Mengunggah Bukti</button>
-                {% else %}
+                
                 <input type="hidden" name="duration_weeks" id="duration_weeks_input" value="1" />
                 <button type="submit" id="pay-btn" class="btn btn-dark btn-sm pay-btn" disabled onclick="return confirm('Do you want to borrow this book?')">Pay & Borrow</button>
-                {% endif %}
+                
               </div>
             </form>
             <!-- End form -->
@@ -257,9 +258,9 @@
   </div>
 
   <!-- Modal Ticket (QR Code dan Bukti Peminjaman) -->
-  <div class="modal fade" id="ticketModal" tabindex="-1" aria-labelledby="ticketModalLabel" aria-hidden="true">
+  <div class="modal fade" id="ticketModal{{ existing_request.borrowing_id}}" tabindex="-1" aria-labelledby="ticketModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content ticket-content p-3">
+      <div class="modal-content ticket-content p-3" id="modalContent-{{ existing_request.borrowing_id }}">
         <div class="strip-header"></div>
         <button type="button" class="btn-close ms-auto me-2 mt-2" data-bs-dismiss="modal"></button>
 
@@ -282,11 +283,11 @@
           </div>
 
           <div class="mb-2 small">
-            <div class="fw-bold">Return Date</div>
-            <div>{{ existing_request.return_date|date:"F j, Y" }}</div>
+            <div class="fw-bold">Due Date</div>
+            <div>{{ existing_request.due_date|date:"F j, Y" }}</div>
           </div>
 
-          <hr style="border: none; border-top: 4px dashed #3b230a" class="my-3" />
+          <hr class="my-3 border-dark border-top border-1 border-dashed" />
 
           <div class="d-flex justify-content-between small">
             <div>
@@ -304,22 +305,21 @@
             <div>{{ selected_book.title }}</div>
           </div>
         </div>
-
-        <div class="text-center mt-4">
-          <button class="download-btn btn btn-dark rounded px-4">
-            Download
-            <img src="{% static 'libraria/asset/Download (1).png' %}" width="20px" alt="Download Icon" />
-          </button>
-          <p class="small mt-2 mb-0">Enjoy the ease of finding books</p>
-        </div>
-
+        <p class="small text-center mt-5 mb-0">Enjoy the ease of finding books</p>
         <div class="strip-footer"></div>
       </div>
+    </div>
+    <div class="text-center mt-4">
+      <button class="download-btn btn btn-dark rounded px-4" style="margin-top: -70px;" onclick="downloadTicket('{{ existing_request.borrowing_id }}')">
+        Download
+        <img src="{% static 'libraria/asset/Download (1).png' %}" width="20px" alt="Download Icon" />
+      </button>
     </div>
   </div>
 
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       // Bagian validasi file dan tombol Pay & Borrow
@@ -343,60 +343,75 @@
 
       // Bagian update harga dan estimasi tanggal kembali
       const durationSelect = document.getElementById("duration_weeks");
-    const weeksLabel     = document.getElementById("weeks-label");
-    const pricePerWeekEl = document.getElementById("price-per-week");
-    const subtotalEl     = document.getElementById("subtotal");
-    const shippingCostEl = document.getElementById("shipping-cost");
-    const totalPriceEl   = document.getElementById("total-price");
-    const estimateDate   = document.getElementById("estimate-return");
-    const durationInput  = document.getElementById("duration_weeks_input");
-    const pickupSelect   = document.getElementById("pickup");  // ← ini yang baru
+      const weeksLabel = document.getElementById("weeks-label");
+      const pricePerWeekEl = document.getElementById("price-per-week");
+      const subtotalEl = document.getElementById("subtotal");
+      const shippingCostEl = document.getElementById("shipping-cost");
+      const totalPriceEl = document.getElementById("total-price");
+      const estimateDate = document.getElementById("estimate-return");
+      const durationInput = document.getElementById("duration_weeks_input");
+      const pickupSelect = document.getElementById("pickup"); // ← ini yang baru
 
-    const today          = new Date();
-    const originalShipCost = parseInt(shippingCostEl.textContent.replace(/\D/g, "")) || 0;
-    const pricePerWeek     = parseInt(pricePerWeekEl.textContent.replace(/\D/g, "")) || 0;
+      const today = new Date();
+      const originalShipCost = parseInt(shippingCostEl.textContent.replace(/\D/g, "")) || 0;
+      const pricePerWeek = parseInt(pricePerWeekEl.textContent.replace(/\D/g, "")) || 0;
 
-    function formatDate(d) {
-      const yyyy = d.getFullYear();
-      const mm   = String(d.getMonth() + 1).padStart(2, "0");
-      const dd   = String(d.getDate()).padStart(2, "0");
-      return `${yyyy}/${mm}/${dd}`;
-    }
-
-    function updatePricing() {
-      // 1) Hitung subtotal
-      const weeks = parseInt(durationSelect.value) || 1;
-      weeksLabel.textContent = weeks;
-      durationInput.value    = weeks;
-      const subtotal = pricePerWeek * weeks;
-      subtotalEl.textContent = subtotal.toLocaleString("id-ID");
-
-      // 2) Tentukan shippingCost: 0 jika “self”
-      let shippingCost = originalShipCost;
-      if (pickupSelect && pickupSelect.value === "self") {
-        shippingCost = 0;
+      function formatDate(d) {
+        const yyyy = d.getFullYear();
+        const mm = String(d.getMonth() + 1).padStart(2, "0");
+        const dd = String(d.getDate()).padStart(2, "0");
+        return `${yyyy}/${mm}/${dd}`;
       }
-      shippingCostEl.textContent = shippingCost.toLocaleString("id-ID");
 
-      // 3) Hitung total price
-      const total = subtotal + shippingCost;
-      totalPriceEl.textContent = total.toLocaleString("id-ID");
+      function updatePricing() {
+        // 1) Hitung subtotal
+        const weeks = parseInt(durationSelect.value) || 1;
+        weeksLabel.textContent = weeks;
+        durationInput.value = weeks;
+        const subtotal = pricePerWeek * weeks;
+        subtotalEl.textContent = subtotal.toLocaleString("id-ID");
 
-      // 4) Hitung tanggal kembali
-      const retDate = new Date(today);
-      retDate.setDate(retDate.getDate() + 7 * weeks);
-      estimateDate.textContent = formatDate(retDate);
-    }
+        // 2) Tentukan shippingCost: 0 jika “self”
+        let shippingCost = originalShipCost;
+        if (pickupSelect && pickupSelect.value === "self") {
+          shippingCost = 0;
+        }
+        shippingCostEl.textContent = shippingCost.toLocaleString("id-ID");
 
-    durationSelect.addEventListener("change", updatePricing);
-    if (pickupSelect) {
-      pickupSelect.addEventListener("change", updatePricing);
-    }
+        // 3) Hitung total price
+        const total = subtotal + shippingCost;
+        totalPriceEl.textContent = total.toLocaleString("id-ID");
 
-    // Inisialisasi
-    updatePricing();
-  });
+        // 4) Hitung tanggal kembali
+        const retDate = new Date(today);
+        retDate.setDate(retDate.getDate() + 7 * weeks);
+        estimateDate.textContent = formatDate(retDate);
+      }
+
+      durationSelect.addEventListener("change", updatePricing);
+      if (pickupSelect) {
+        pickupSelect.addEventListener("change", updatePricing);
+      }
+
+      // Inisialisasi
+      updatePricing();
+    });
+
+    function downloadTicket(borrowingId) {
+        const element = document.getElementById(`modalContent-${borrowingId}`);
+
+        // Pastikan semua elemen fully visible
+        html2canvas(element, {
+          useCORS: true,
+          backgroundColor: null,
+          scale: 2,
+        }).then((canvas) => {
+          const link = document.createElement("a");
+          link.download = `ticket-${borrowingId}.png`;
+          link.href = canvas.toDataURL();
+          link.click();
+        });
+      }
   </script>
 </body>
 {% endblock %}
-

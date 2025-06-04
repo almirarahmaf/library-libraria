@@ -2,6 +2,10 @@
     font-family: 'Jeju Gothic', sans-serif;
 }
 
+html {
+        scroll-behavior: smooth;
+}
+
 body{
     background-color: #F9F9F5;
 }
@@ -289,6 +293,14 @@ body{
     font-size: 28px;
     font-weight: bold;
     cursor: pointer;
+}
+
+.faq-popup p a{
+    color: #3B230A;
+}
+
+.faq-popup p a:hover{
+    color: #CFBBA6;
 }
 
 @media (max-width: 768px){

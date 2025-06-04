@@ -58,14 +58,29 @@ main {
 }
 
 .btn-brown {
-  background-color: #6b3e1d;
+  display: inline-block;
+  padding: 3px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  text-align: center;
+  border: 2px solid;
+  box-sizing: border-box;
+  width: 120px;
+  background-color: #3b230a;
   color: white;
+  height: 35px;
 }
 
 .btn-outline {
   border: 2px solid #6b3e1d;
   color: #6b3e1d;
   background: transparent;
+  display: inline-block;
+  padding: 3px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  text-align: center;
+  height: 35px;
 }
 
 .back-container {
@@ -159,6 +174,11 @@ a {
   font-size: 20px;
   color: #3b230a;
   margin-left: 0.5rem;
+}
+
+.btn-brown:hover {
+  background-color: #f9f9f5;
+  color: #3b230a;
 }
 
 @media (max-width: 768px) {

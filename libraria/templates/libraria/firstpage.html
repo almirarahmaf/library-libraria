@@ -5,22 +5,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Font Awesome & Google Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://fonts.googleapis.com/earlyaccess/jejugothic.css" rel="stylesheet" type="text/css" />
+
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="{% static 'libraria/css/style.css' %}">
+
+    <style>
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+        .fade-in.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+
     <title>Libraria: Limitless Book Borrowing</title>
 </head>
 <body>
     <div class="container-fluid">
-        <!-- navbar -->
+        <!-- Navbar -->
         <nav class="navbar navbar-expand-sm">
             <a class="navbar-brand" href="#">Libraria</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
                 <span class="navbar-toggler-icon"></span>
             </button>
-
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
@@ -33,11 +51,11 @@
             </div>
         </nav>
 
-        <!-- section 1 -->
-        <div class="section1" id="firstpage">
+        <!-- Section 1 -->
+        <div class="section1 fade-in" id="firstpage">
             <div class="row">
                 <div class="col-6">
-                    <h1>Books in Motion, <br>Knowledge in Action <br>Borrow & Share Here!</h1>
+                    <h1>Books in Motion,<br>Knowledge in Action<br>Borrow & Share Here!</h1>
                     <p>Borrow, lend, and explore books effortlessly<br>
                         connect with readers and libraries near you!</p>
                 </div>
@@ -50,8 +68,8 @@
             </div>
         </div>
 
-        <!-- section 2 -->
-        <div class="section2" id="about">
+        <!-- Section 2 -->
+        <div class="section2 fade-in" id="about">
             <br>
             <h1>About Libraria</h1>
             <img src="{% static 'libraria/asset/Section2-image.png' %}" alt="Section 2" class="image-section2">
@@ -63,8 +81,8 @@
             </div>
         </div>
 
-        <!-- section 3 -->
-        <div class="section3" id="review">
+        <!-- Section 3 -->
+        <div class="section3 fade-in" id="review">
             <br>
             <h1>Review</h1>
 
@@ -85,8 +103,9 @@
                             </div>
                         {% endif %}
                     {% endfor %}
+                </div>
 
-                <!-- button -->
+                <!-- Carousel Controls -->
                 <button class="carousel-control-prev" type="button" data-bs-target="#reviewCarousel" data-bs-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                     <span class="visually-hidden">Previous</span>
@@ -96,17 +115,17 @@
                     <span class="visually-hidden">Next</span>
                 </button>
             </div>
-            
-            <!-- button -->
+
+            <!-- Review Button -->
             <div class="text-center">
                 <button class="btn" type="button" id="review-button">
                     <a class="nav-link" href="{% url 'login' %}?next={% url 'review_web' %}">Write My Review</a>
                 </button>
             </div>
         </div>
-        
-        <!-- footer -->
-        <div class="d-flex justify-content-between footer">
+
+        <!-- Footer -->
+        <div class="d-flex justify-content-between footer fade-in">
             <h3>Libraria</h3>
             <div class="social-media">
                 <a href="#" class="linkedin me-2"><i class="fa fa-linkedin-square"></i></a>
@@ -116,6 +135,7 @@
         </div>
     </div>
 
+    <!-- FAQ -->
     <div class="faq-icon" id="faq-icon">
         <i class="fa fa-question-circle"></i>
     </div>
@@ -125,8 +145,6 @@
             <h2>Frequently Asked Questions</h2>
             <p>Q: What is Libraria?<br>A: It's a platform to borrow and lend books with ease.</p>
             <hr>
-            <p>Q: Who can use Libraria?<br>A: Libraria is open to everyone—students, teachers, librarians, researchers, and anyone who is passionate about reading and books.</p>
-            <hr>
             <p>Q: Is Libraria free to use?<br>A: Yes, all features on Libraria are completely free.</p>
             <hr>
             <p>Q: How do I sign up for Libraria?<br>A: You can register via the official website using a valid email address.</p>
@@ -134,10 +152,36 @@
             <p>Q: What should I do if I forget my password?<br>A: Click on "Forgot Password" on the login page and follow the instructions to reset it via your registered email.</p>
             <hr>
             <p>Q: Can I upload my own books to Libraria?<br>A: Yes. Once registered as a contributor, you can upload your own books or content as long as they comply with our terms and conditions.</p>
-            <!-- FAQ LAIN -->
+            <hr>
+            <p>Q: What if I have other questions?<br>A: Ask via Instagram.</p>
+            <hr>
+            <p><a href="#" style="text-decoration: underline;" target="_blank" onclick="return confirm('This feature is unavailable')">View Tutorial</a></p>
         </div>
     </div>
 
+    <!-- Scripts -->
     <script src="{% static 'libraria/js/faqPopup.js' %}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const faders = document.querySelectorAll('.fade-in');
+            const appearOptions = {
+                threshold: 0.1,
+                rootMargin: "0px 0px -50px 0px"
+            };
+
+            const appearOnScroll = new IntersectionObserver(function (entries, observer) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('show');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, appearOptions);
+
+            faders.forEach(fader => {
+                appearOnScroll.observe(fader);
+            });
+        });
+    </script>
 </body>
 </html>

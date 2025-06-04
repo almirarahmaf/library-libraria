@@ -48,12 +48,12 @@ body{
 #login-form a{
     text-align: center;
     color: #3B230A;
-    text-decoration: none;
+    
     font-family: 'Jeju Gothic', sans-serif;
 }
 
 #login-form a:hover{
-    text-decoration: underline;
+    color: #CFBBA6;
 }
 
 #login-form .form-username{
