@@ -27,8 +27,6 @@
               <div class="star">
                 {# Menampilkan rating rata-rata buku #} {% for i in "12345" %} {% if forloop.counter <= full_stars %}
                 <i class="fa fa-star" style="color: #b4942a"></i>
-                {% elif forloop.counter == full_stars|add:"1" and has_half %}
-                <i class="fa fa-star-half-o" style="color: #b4942a"></i>
                 {% else %}
                 <i class="fa fa-star-o" style="color: #b4942a"></i>
                 {% endif %} {% endfor %}

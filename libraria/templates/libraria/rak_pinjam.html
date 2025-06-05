@@ -51,8 +51,8 @@
           <div class="table-row align-items-center">
             <div>{{ b.book.title }}</div>
             <div>{% with owner=b.book.librender %} {% if owner.profile.name %} {{ owner.profile.name }} {% else %} {{ owner.username }} {% endif %} {% endwith %}</div>
-            <div>{{ b.borrow_date|date:"Y/m/d" }}</div>
-            <div>{{ b.due_date|date:"Y/m/d" }}</div>
+            <div>{% if b.status == 'Pending' %} - {% else %} {{ b.borrow_date|date:"Y/m/d" }} {% endif %}</div>
+            <div>{% if b.status == 'Pending' %} - {% else %} {{ b.due_date|date:"Y/m/d" }} {% endif %}</div>
 
             <div>{% if b.denda and b.denda|floatformat:0 != "0" %} Rp. {{ b.denda|floatformat:0 }} {% else %} Rp. - {% endif %}</div>
 
